@@ -6,6 +6,7 @@ import video from './Images/Ogyaback.mp4';
 import './Home.css'; // Make sure to include this for styling
 import { Link } from "react-router-dom";
 import image from './Images/about.jpg'
+import ComboOffers from "./ComboOffers";
 const HomePage = () => {
   return (
     <div className="home-page">
@@ -34,8 +35,7 @@ const HomePage = () => {
 </div>
 <div className="offerposter">
   <div>
-    <h1>offer 2+1</h1>
-    <img src={image} alt="" />
+    <ComboOffers/>
   </div>
 </div>
 

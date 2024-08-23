@@ -19,6 +19,7 @@ import Footer from './pages/footer';
 import ProfilePage from './pages/Profile';
 import Admin from '../src/admin/Admin'
 import ConfirmationPage from './pages/orderConform';
+import OfferDetails from './pages/OfferShow';
 const App = () => {
     return (
         <Router>
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/product/:id" element={<Productshow />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/billing" element={<BillingPage />} />
+                <Route path="/offer/:id" element={<OfferDetails />} />
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/register' element={<RegistrationPage/>}/>
                 <Route path="/checkout/*" element={<Checkout />} />

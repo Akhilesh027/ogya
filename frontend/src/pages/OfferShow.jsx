@@ -21,7 +21,7 @@ const Productshow = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true); // Start loading
-        const response = await axios.get(`https://ogya.onrender.com/api/products/${id}`);
+        const response = await axios.get(`https://ogya.onrender.com/api/offers/${id}`);
         setProduct(response.data);
         setLoading(false); // Stop loading
       } catch (error) {
@@ -33,7 +33,7 @@ const Productshow = () => {
 
     const fetchOtherProducts = async () => {
       try {
-        const response = await axios.get('https://ogya.onrender.com/api/products'); // Fetch all products
+        const response = await axios.get('https://ogya.onrender.com/api/offer'); // Fetch all products
         const filteredProducts = response.data.filter((item) => item._id !== id);
         setOtherProducts(filteredProducts);
       } catch (error) {
@@ -94,7 +94,7 @@ const Productshow = () => {
           </div>
         </div>
         <div className="description">
-          <h2>{product.name}</h2>
+          <h2>{product.title}</h2>
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
           <div className="product-actions">

@@ -57,11 +57,7 @@
 .offerposter{
   width: 100%;
 }
-.offerposter img{
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
+
 /* Footer section styling */
 .footer-section {
   width: 100%;

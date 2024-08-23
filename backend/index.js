@@ -16,6 +16,8 @@ const { Contact } = require('./Module/Contact');
 const app = express();
 const port = 5000;
 const fs = require('fs');
+const ComboOffer = require('./Module/OfferCombo');
+const { off } = require('process');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -509,6 +511,52 @@ app.post('/api/contact', async (req, res) => {
     res.status(500).json({ message: 'Failed to send message.' });
   }
 });
+
+app.post('/api/offers', upload.array('images', 10), async (req, res) => {
+  const { name, price, description } = req.body;
+  const images = req.files.map(file => `${file.filename}`);
+
+  try {
+    // Assuming Product is a Mongoose model or similar ORM
+    const newProduct = await ComboOffer.create({
+      name,
+      price,
+      description,
+      images: JSON.stringify(images)
+    });
+    res.status(201).json(newProduct);
+  } catch (error) {
+    console.error('Error creating product:', error);
+    res.status(400).json({ error: 'Error uploading product' });
+  }
+});
+
+app.get('/api/offer', async (req, res) => {
+  try {
+    const products = await ComboOffer.findAll();
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Error fetching products' });
+  }
+});
+
+app.get('/api/offers/:id', async (req, res) => {
+  try {
+    const product = await ComboOffer.findByPk(req.params.id);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ error: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 app.get('*', (req, res) => {
