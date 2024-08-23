@@ -157,7 +157,7 @@ const Buy = () => {
                 amount: paymentDetails.amount
             };
 
-            const response = await axios.post('http://localhost:5000/api/billing', orderData);
+            const response = await axios.post('https://ogya.onrender.com/api/billing', orderData);
 
             if (response.status === 201) {
                 setLoading(false); // Hide loading spinner

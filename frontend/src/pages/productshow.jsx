@@ -19,7 +19,7 @@ const Productshow = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`https://ogya.onrender.com/api/products/${id}`);
         setProduct(response.data);
         setLoading(false);
       } catch (error) {
@@ -31,7 +31,7 @@ const Productshow = () => {
 
     const fetchOtherProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products'); // Fetch all products
+        const response = await axios.get('https://ogya.onrender.com/api/products'); // Fetch all products
         const filteredProducts = response.data.filter((item) => item._id !== id);
         setOtherProducts(filteredProducts);
       } catch (error) {
@@ -76,7 +76,7 @@ const Productshow = () => {
           <div className="main-image">
             
               <img
-              src={`http://localhost:5000/uploads/${product.images}`}     
+              src={`https://ogya.onrender.com/uploads/${product.images}`}     
               alt={`${product.name} - Main`}
               />
             
@@ -85,7 +85,7 @@ const Productshow = () => {
             {images.map((image, index) => (
               <img
                 key={index}
-                src={`http://localhost:5000/uploads/${image}`}
+                src={`https://ogya.onrender.com/uploads/${image}`}
                 alt={`${product.name} - Thumbnail ${index + 1}`}
                 className={activeThumbnail === index ? 'active-thumbnail' : ''}
                 onClick={() => setActiveThumbnail(index)}

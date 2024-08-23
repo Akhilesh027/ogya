@@ -9,7 +9,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
+        const response = await axios.get('https://ogya.onrender.com/api/products');
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -21,7 +21,7 @@ const Products = () => {
 
   const handleDelete = async (productId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${productId}`);
+      await axios.delete(`https://ogya.onrender.com/api/products/${productId}`);
       setProducts(products.filter(product => product.id !== productId));
       alert('Product deleted successfully');
     } catch (error) {
@@ -37,7 +37,7 @@ const Products = () => {
         {products.map(product => (
           <div key={product.id} className="product-card">
             <div className="product-image">
-              <img src={`http://localhost:5000/uploads/${product.images}`}alt={product.name} />
+              <img src={`https://ogya.onrender.com/uploads/${product.images}`}alt={product.name} />
             </div>
             <div className="product-details">
               <h3>{product.name}</h3>

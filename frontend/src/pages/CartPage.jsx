@@ -28,7 +28,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 ) : (
                     cartItems.map((item, index) => (
                         <div key={index} className="cart-item">
-                            <img src={`http://localhost:5000/uploads/${item.images}`} alt={item.name} />
+                            <img src={`https://ogya.onrender.com/uploads/${item.images}`} alt={item.name} />
                             <div className="cart-item-details">
                                 <h3>{item.name}</h3>
                                 <p>Price: ₹{item.price}</p>

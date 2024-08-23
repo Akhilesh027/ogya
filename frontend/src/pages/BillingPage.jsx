@@ -142,7 +142,7 @@ const BillingPage = () => {
                 amount: paymentDetails.amount
             };
     
-            const response = await axios.post('http://localhost:5000/api/order', orderData);
+            const response = await axios.post('https://ogya.onrender.com/api/order', orderData);
     
             if (response.status === 201) {
                 alert("Order successfully completed");

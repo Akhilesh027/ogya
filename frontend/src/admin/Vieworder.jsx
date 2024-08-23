@@ -8,7 +8,7 @@ const OrderListPage = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/billing');
+                const response = await axios.get('https://ogya.onrender.com/api/billing');
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching orders:', error);
@@ -20,7 +20,7 @@ const OrderListPage = () => {
 
     const handleDelete = async (orderId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/billing/${orderId}`);
+            await axios.delete(`https://ogya.onrender.com/api/billing/${orderId}`);
             setOrders(orders.filter(order => order.id !== orderId));
             alert('Order deleted successfully');
         } catch (error) {

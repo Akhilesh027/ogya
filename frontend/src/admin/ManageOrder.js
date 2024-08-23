@@ -10,7 +10,7 @@ const ViewBillings = () => {
     useEffect(() => {
         const fetchBillings = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/billing');
+                const response = await axios.get('https://ogya.onrender.com/api/billing');
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching billings', error);
@@ -31,7 +31,7 @@ const ViewBillings = () => {
         try {
             const status = selectedStatus[orderId];
             if (status) {
-                await axios.put(`http://localhost:5000/orders/${orderId}/status`, { status });
+                await axios.put(`https://ogya.onrender.com/orders/${orderId}/status`, { status });
                 setOrders((prevOrders) =>
                     prevOrders.map((order) =>
                         order.id === orderId ? { ...order, paymentStatus: status } : order

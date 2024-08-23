@@ -17,7 +17,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`https://ogya.onrender.com/api/products/${id}`);
         setProduct(response.data);
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -49,7 +49,7 @@ const EditProduct = () => {
     }
     
     try {
-      await axios.put(`http://localhost:5000/api/products/${id}`, formData, {
+      await axios.put(`https://ogya.onrender.com/api/products/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

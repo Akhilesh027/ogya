@@ -11,7 +11,7 @@ const ProfilePage = () => {
         const fetchUserData = async () => {
             try {
                 const userId = 'USER_ID'; // Replace with actual user ID from context or auth
-                const response = await axios.get(`http://localhost:5000/api/orders/user/${userId}`);
+                const response = await axios.get(`https://ogya.onrender.com/api/orders/user/${userId}`);
                 setOrders(response.data);
                 setLoading(false);
             } catch (error) {

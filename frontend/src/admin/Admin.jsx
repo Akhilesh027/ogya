@@ -9,7 +9,7 @@ const Admin = () => {
 
   useEffect(() => {
     // Fetch total orders
-    axios.get('http://localhost:5000/api/totalOrders')
+    axios.get('https://ogya.onrender.com/api/totalOrders')
       .then(response => {
         setTotalOrders(response.data.totalOrders);
       })
@@ -18,7 +18,7 @@ const Admin = () => {
       });
 
     // Fetch total amount generated
-    axios.get('http://localhost:5000/api/totalAmount')
+    axios.get('https://ogya.onrender.com/api/totalAmount')
       .then(response => {
         setTotalAmount(response.data.totalAmount);
       })

@@ -9,7 +9,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products");
+        const response = await axios.get("https://ogya.onrender.com/api/products");
         const fetchedProducts = response.data.map((product) => {
           // Clean and extract the image filename from the array
           const imageUrl = Array.isArray(product.images) && product.images.length > 0 
@@ -42,7 +42,7 @@ const Products = () => {
           <div key={product.id} className="product-card">
             <div className="product-image">
               <img
-                src={`http://localhost:5000/uploads/${product.images}`} // Updated to handle URL construction
+                src={`https://ogya.onrender.com/uploads/${product.images}`} // Updated to handle URL construction
                 alt={product.name}
               />
               <div className="product-details">
