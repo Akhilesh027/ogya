@@ -94,7 +94,7 @@ const Productshow = () => {
           </div>
         </div>
         <div className="description">
-          <h2>{product.title}</h2>
+          <h2>{product.name}</h2>
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
           <div className="product-actions">
