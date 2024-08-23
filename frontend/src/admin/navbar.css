@@ -1,0 +1,19 @@
+.navbar{
+    width: 100vw;
+    height: 10vh;
+    background-color: black;
+    color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+.Link{
+    color: aliceblue;
+    text-decoration: none;
+    padding: 20px;
+    text-transform: capitalize;
+}
+.admin-link{
+    padding: 10px 30px;
+}

@@ -1,0 +1,128 @@
+/* ProductsPage.css */
+
+.products-page {
+  padding: 20px;
+  background-color: #f3f3f3;
+  min-height: 100vh;
+  font-family: Helvetica, Georgia;
+}
+
+.products-page h2 {
+  text-align: center;
+  font-size: 2.5em;
+  color: #333;
+}
+.products-page p {
+ margin: 10px;
+}
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 530px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  width: 100%;
+  height: 620px;
+  flex: 1;
+}
+
+.product-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.product-details {
+display: flex;
+flex-direction: column;
+align-items: center;
+  font-family: Helvetica, Georgia;
+}
+
+.product-details h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin: 0;
+}
+
+.product-details p {
+  font-size: 1.1em;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.view-product-button {
+  display: flex;
+  text-align: center;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.view-product-button:hover {
+  background-color: #fff;
+  color: #333;
+}
+/* Responsive Design */
+@media (max-width: 1024px) {
+.products-container {
+    grid-template-columns: repeat(2, 1fr); /* Two columns for tablets */
+}
+}
+
+@media (max-width: 768px) {
+  .products-page{
+    padding: 5px;
+  }
+.products-container {
+    grid-template-columns: repeat(2, 1fr); /* Two columns for mobile devices */
+}
+.products-container{
+  width: 100%;
+  height: 20%;
+}
+}
+
+@media (max-width: 480px) {
+  .products-page{
+    padding: 4px;
+  }
+  .products-container {
+      grid-template-columns: repeat(2, 1fr); /* Two columns for mobile devices */
+      padding: 0;
+  }
+  .products-container{
+    width: 100%;
+  }
+  .product-image img{
+    width: 100%;
+    height: 60%;
+  }
+  .product-card{
+    height: auto;
+  }
+  }

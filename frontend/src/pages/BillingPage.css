@@ -1,0 +1,124 @@
+/* Container for the entire billing page
+.billing-page {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    position: relative;
+}
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    color: #333;
+    z-index: 1000;
+}
+
+form[disabled] {
+    pointer-events: none;
+}
+.billing-page h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #444;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+    color: #555;
+    font-weight: 500;
+}
+
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+.total-amount {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.pay-button-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: rgb(206, 151, 79);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.25em;
+    margin-top: 25px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.pay-button-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.pay-button-btn:focus {
+    outline: none;
+}
+
+.payment-methods {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.payment-methods div {
+    flex: 1;
+    text-align: center;
+}
+
+.payment-methods img {
+    width: 80px;
+    height: auto;
+    margin: 10px;
+    transition: opacity 0.3s;
+}
+
+.payment-methods img:hover {
+    opacity: 0.7;
+}
+
+
+#paypal-button-container {
+    margin-top: 30px;
+    text-align: center;
+} */

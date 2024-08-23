@@ -1,0 +1,82 @@
+/* ConfirmationPage.css */
+
+.confirmation-page {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 100%;
+    height: 100vh;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-page h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.confirmation-page p {
+    color: #34495e;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.confirmation-page .order-details {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-page .order-details p {
+    margin: 10px 0;
+}
+
+.confirmation-page .order-details .order-id {
+    font-weight: bold;
+}
+
+.confirmation-page .order-details .status {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.confirmation-page .order-summary {
+    margin-top: 20px;
+}
+
+.confirmation-page .order-summary h2 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.confirmation-page .order-summary .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.confirmation-page .order-summary .summary-item div {
+    font-size: 16px;
+}
+
+.confirmation-page .back-to-home {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.confirmation-page .back-to-home a {
+    text-decoration: none;
+    color: #2980b9;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.confirmation-page .back-to-home a:hover {
+    text-decoration: underline;
+}
