@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon backend/index.js",
@@ -24,5 +23,7 @@
     "nodemailer": "^6.9.14",
     "path": "^0.12.7",
     "sequelize": "^6.37.3"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
