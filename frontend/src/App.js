@@ -17,7 +17,6 @@ import RegistrationPage from './pages/Authontication/Register';
 import Checkout from './pages/Billing/Checkout';
 import Footer from './pages/footer';
 import ProfilePage from './pages/Profile';
-import Admin from '../src/admin/Admin'
 import ConfirmationPage from './pages/orderConform';
 import OfferDetails from './pages/OfferShow';
 const App = () => {
@@ -26,7 +25,6 @@ const App = () => {
           <Navbar/>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/admin" element={<Admin />} />
                 <Route path="/buy" element={<Buy />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/profile" element={<ProfilePage />} />
