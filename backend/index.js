@@ -346,7 +346,6 @@ app.get('/api/cart', async (req, res) => {
   }
 });
 
-// Route to handle billing and send an email after successful billing
 const sendAdminNotification = async (firstName, amount, transactionId) => {
   try {
     let transporter = nodemailer.createTransport({
@@ -472,7 +471,6 @@ Email: [Your Company Email]`;
   }
 });
 
-// DELETE route to remove an order by its ID
 app.delete('/api/billing/:id', async (req, res) => {
   const { id } = req.params;
 
