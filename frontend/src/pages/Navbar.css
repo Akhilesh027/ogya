@@ -6,8 +6,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Navbar container */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -17,7 +15,6 @@
     position: relative;
     z-index: 1000;
 }
-
 /* Hamburger icon */
 .hamburger {
     display: none;

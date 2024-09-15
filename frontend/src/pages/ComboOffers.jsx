@@ -18,8 +18,7 @@ const ComboOffers = () => {
     };
 
     fetchOffers();
-  }, []); // Empty dependency array ensures this runs once on component mount
-
+  }, []); 
   return (
     <>
       <div className="combooffer">

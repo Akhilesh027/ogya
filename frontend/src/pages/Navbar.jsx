@@ -41,7 +41,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="navbar">
+            <nav id='navbar' className="navbar">
                 <div className="hamburger">
                     <FaBars size={25} onClick={toggleMenu} />
                 </div>
