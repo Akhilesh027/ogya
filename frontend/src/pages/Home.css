@@ -226,19 +226,25 @@ padding: 0;
 }
 .chatwithus{
   position: absolute;
-  bottom: 10vh;
+  flex-direction: column;
+  align-items: center;
+  bottom: 13vh;
+  width: 50px;
   right: 10vh;
 }
 .chatwithus a{
   position: fixed;
 }
 .chatwithus a {
-  color: #000;
+  color: green;
+  align-items: center;
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
 }
 .chatwithus i{
   font-size: 40px;
 }
 .chatwithus a:hover {
-  color: #000;
+  color: green;
 }

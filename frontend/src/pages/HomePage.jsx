@@ -115,6 +115,7 @@ const HomePage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
+          <h3>chat with us</h3>
           <i id="icon" className="fab fa-whatsapp"></i>
         </a>
       </div>

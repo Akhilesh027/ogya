@@ -22,7 +22,7 @@ const ComboOffers = () => {
   return (
     <>
       <div className="combooffer">
-        <h1>Combo Offers</h1> 
+        <h1>Dasara Offers</h1> 
         <div className="combo">
           {offers.map((offer) => (
             <div className="combo-item" key={offer.id}>

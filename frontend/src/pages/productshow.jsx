@@ -51,11 +51,19 @@ const Productshow = () => {
   };
 
   const handleAddToCart = () => {
+    if (quantity < 6) {
+      alert('You cannot buy less than 6 quantities of this product.');
+      return;
+    }
     addToCart({ ...product, quantity });
     alert('Product added to cart successfully!');
   };
 
   const handleBuyNow = () => {
+    if (quantity < 6) {
+      alert('You cannot buy less than 6 quantities of this product.');
+      return;
+    }
     const totalAmount = product.price * quantity;
     navigate('/buy', {
       state: {
@@ -98,7 +106,7 @@ const Productshow = () => {
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
           <div className="product-actions">
-            <label htmlFor="quantity">Quantity:</label>
+            <label htmlFor="quantity">Quantity: <span>Min quantity of prodect is 6 items</span></label>
             <input
               type="number"
               id="quantity"
@@ -118,6 +126,6 @@ const Productshow = () => {
       </div> */}
     </>
   );
-}
+};
 
 export default Productshow;
