@@ -178,6 +178,9 @@
         width: 100vw;
         height: auto;
     }
+    .navbar{
+        padding: 20px 20px;
+    }
     .navbar-container {
         display: flex;
         justify-content: space-between;
@@ -209,7 +212,7 @@
     width: 180px;
     height: 20vh;
     left: 25%; 
-    top: -40px;
+    margin-top: -1vh;
 }
     .links {
         display: none;
