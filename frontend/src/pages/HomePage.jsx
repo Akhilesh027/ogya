@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import image from "./Images/about.jpg";
 import ComboOffers from "./ComboOffers";
 import chat from './Images/chat.svg'
+import sale from './Images/Sale.png'
 const HomePage = () => {
   return (
     <div className="home-page">
@@ -26,7 +27,7 @@ const HomePage = () => {
 
 
       <div className="offerposter">
-        <ComboOffers />
+        <img src={sale} alt="slae" />
       </div>
 
       <div className="products-section">

@@ -47,7 +47,7 @@ const ContactPage = () => {
         </div>
         <div className="contact-details">
           <h2>Contact Information</h2>
-          <p><i className="fas fa-map-marker-alt"></i> 123 Street, City, Country</p>
+          <p><i className="fas fa-map-marker-alt"></i> Hanuman Nagar,Manikonda Jagir, Hydrebad,Telangana 500089.</p>
           <p><i className="fas fa-phone-alt"></i> +123 456 7890</p>
           <p><i className="fas fa-envelope"></i> info@example.com</p>
         </div>

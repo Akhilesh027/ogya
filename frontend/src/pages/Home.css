@@ -57,7 +57,10 @@
 .offerposter{
   width: 100%;
 }
-
+.offerposter img{
+  width: 100%;
+  height: 90vh;
+}
 /* Footer section styling */
 .footer-section {
   width: 100%;
