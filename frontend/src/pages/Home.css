@@ -224,19 +224,13 @@
 .products-section, .review-section, .footer-section {
 padding: 0;
 }
-.chatwithus{
-  position: absolute;
-  flex-direction: column;
-  align-items: center;
-  bottom: 13vh;
-  width: 50px;
-  right: 10vh;
-}
+
+
 .chatwithus a{
   position: fixed;
 }
 .chatwithus a {
-  color: green;
+  color: white;
   align-items: center;
   text-decoration: none;
   display: flex;
@@ -247,4 +241,26 @@ padding: 0;
 }
 .chatwithus a:hover {
   color: green;
+}
+
+.chatwithus {
+  width: 200px;
+  position: fixed;
+  bottom: 13vh;
+  right: 0;
+}
+
+.whatsapp-link {
+  display: flex;
+  align-items: center;
+  background-color: #25d366;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+}
+
+.whatsapp-icon {
+  margin-left: 10px;
+  font-size: 24px;
 }

@@ -50,6 +50,11 @@ const Navbar = () => {
                         <img src={logo} alt="logo" />
                     </Link>
                 </div>
+                <div className="mcart">
+                <Link onClick={toggleCart} id='cart'>
+                            <FaShoppingCart size={20} />
+                        </Link>
+                </div>
                 <div className={`links ${isMenuOpen ? 'active' : ''}`}>
                     <Link to="/" className="link" onClick={closeMenu}>Home</Link>
                     <Link to="/about" className="link" onClick={closeMenu}>About</Link>
@@ -59,7 +64,7 @@ const Navbar = () => {
                <div>
                <ul className={`navLinks ${isMenuOpen ? 'active' : ''}`}>
                     <li>
-                        <Link onClick={toggleCart} className="link" id='cart'>
+                        <Link onClick={toggleCart} id='cart'>
                             <FaShoppingCart size={20} />
                         </Link>
                         <Link onClick={toggleSearch} className="link">

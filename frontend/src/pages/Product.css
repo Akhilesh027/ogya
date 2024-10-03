@@ -59,13 +59,13 @@ align-items: center;
 
 .product-details h3 {
   font-size: 1.2em;
-  color: #333;
+  color: black;
   margin: 0;
 }
 
 .product-details p {
   font-size: 1.1em;
-  color: #666;
+  color: black;
   margin-bottom: 15px;
 }
 

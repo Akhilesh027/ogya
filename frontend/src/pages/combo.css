@@ -24,8 +24,8 @@
 /* Add media query for mobile view */
 @media (max-width: 768px) { /* Adjust the max-width as needed for your breakpoints */
   .combo-item {
-    width: calc(50% - 10px); /* Two items per row with a gap */
-    height:200px;
+    width: 100%;
+    height: 100%;
   }
 }
   
