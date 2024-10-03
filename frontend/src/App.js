@@ -19,6 +19,7 @@ import Footer from './pages/footer';
 import ProfilePage from './pages/Profile';
 import ConfirmationPage from './pages/orderConform';
 import OfferDetails from './pages/OfferShow';
+import ComboOffers from './pages/ComboOffers';
 const App = () => {
     return (
         <Router>
@@ -38,7 +39,7 @@ const App = () => {
                 <Route path='/register' element={<RegistrationPage/>}/>
                 <Route path="/checkout/*" element={<Checkout />} />
                 <Route path="/confirmation" element={<ConfirmationPage />} />
-
+                <Route path='/combo' element={<ComboOffers/>}/>
             </Routes>
             <Footer/>
         </Router>

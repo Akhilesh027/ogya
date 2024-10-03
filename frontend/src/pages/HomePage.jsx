@@ -27,7 +27,7 @@ const HomePage = () => {
 
 
       <div className="offerposter">
-        <img src={sale} alt="slae" />
+        <Link to='/combo'><img src={sale} alt="slae" /></Link>
       </div>
 
       <div className="products-section">
