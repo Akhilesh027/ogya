@@ -7,7 +7,7 @@ import "./Home.css"; // Make sure to include this for styling
 import { Link } from "react-router-dom";
 import image from "./Images/about.jpg";
 import ComboOffers from "./ComboOffers";
-
+import chat from './Images/chat.svg'
 const HomePage = () => {
   return (
     <div className="home-page">
@@ -87,8 +87,7 @@ const HomePage = () => {
           rel="noopener noreferrer"
           className="whatsapp-link"
         >
-          <h3>Chat with us</h3>
-          <i id="icon" className="fab fa-whatsapp whatsapp-icon"></i>
+          <img src={chat} alt="" />
         </a>
       </div>
 

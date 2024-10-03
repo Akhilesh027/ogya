@@ -11,7 +11,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #2F2E1A;
-    padding: 15px 20px;
+    padding: 10px 20px;
     position: relative;
     z-index: 1000;
 }
@@ -207,9 +207,9 @@
     }
 .navbar .logo img{
     width: 180px;
-    height: 17vh;
+    height: 20vh;
     left: 25%; 
-    top: -45px;
+    top: -40px;
 }
     .links {
         display: none;
