@@ -54,6 +54,23 @@ const Navbar = () => {
                 <Link onClick={toggleCart} id='cart'>
                             <FaShoppingCart size={20} />
                         </Link>
+                        <Link onClick={toggleSearch} className="link">
+                            <FaSearch color='white' size={20} />
+                        </Link>
+                        {isLoggedIn ? (
+                            <>
+                                {/* <Link className="link" to="/profile">
+                                    <FaUser size={20} />
+                                </Link> */}
+                                <FaUser color="white" size={20} />
+                                
+                            </>
+                        ) : (
+                            <Link className='link' to='/login'>
+                                <button className='loginbtn'>Login</button>
+                            </Link>
+                        )}
+
                 </div>
                 <div className={`links ${isMenuOpen ? 'active' : ''}`}>
                     <Link to="/" className="link" onClick={closeMenu}>Home</Link>

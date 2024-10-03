@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors'); 
+const cors = require('cors');
 const Product = require('./Module/Product');
 const sequelize = require('./Database/db');
 const multer = require('multer');
@@ -29,7 +29,9 @@ sequelize.sync()
   .then(() => console.log('Database synced'))
   .catch(err => console.error('Error syncing database:', err));
 
-app.use(cors()); 
+
+  app.use(cors());
+  
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Serve static files from 'uploads' directory
@@ -93,11 +95,17 @@ const sendEmail = async (to, subject, text) => {
     console.error('Error sending email:', error);
   }
 };
-app.post('/api/register', async (req, res) => {
+const JWT_SECRET = process.env.JWT_SECRET || 'BANNU9';
+
+// Registration route
+app.post('/register', async (req, res) => {
   const { firstName, lastName, mobileNo, email, password, username } = req.body;
 
   try {
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user in database
     const newUser = await User.create({
       firstName,
       lastName,
@@ -106,12 +114,15 @@ app.post('/api/register', async (req, res) => {
       password: hashedPassword,
       username
     });
+
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {
+    console.error('Registration error:', error);
     res.status(400).json({ error: 'Registration failed' });
   }
 });
 
+// Login route
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -129,13 +140,25 @@ app.post('/login', async (req, res) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user.userId }, 'BANNU9', { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token, username: user.username, userId: user.id });
   } catch (error) {
     console.error('Login error:', error); // Log the error for debugging
     res.status(500).json({ error: 'Login failed' });
   }
 });
+
+// Protecting routes: Example middleware for checking token
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(403).send({ message: 'No token provided.' });
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(500).send({ message: 'Failed to authenticate token.' });
+    req.userId = decoded.userId; // Save user ID for use in other routes
+    next();
+  });
+};
 
 // Get user details
 app.get('/me', async (req, res) => {

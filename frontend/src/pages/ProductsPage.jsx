@@ -26,7 +26,7 @@ const Products = () => {
 
   return (
     <section className="products-page-home">
-      <h2>About Our Products</h2>
+      <h2>Our Products</h2>
       {/* <p>
         Transform your space into a serene sanctuary with Ogya Agarbathi’s range
         of 100% natural incense sticks. Each stick is meticulously crafted using

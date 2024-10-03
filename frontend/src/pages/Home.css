@@ -68,7 +68,8 @@
   margin: 0;
 }
 .offers {
-  background: #82B7BB; /* Gradient background */
+  background: rgb(206, 151, 79); /* Gradient background */
+  color: #fff;
   padding: 10px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -99,6 +100,7 @@
   color: #fff;
   padding: 0 5px;
   border-radius: 5px;
+  font-style: bold;
 }
 .why-choose-us {
   font-family: 'Lato', sans-serif;

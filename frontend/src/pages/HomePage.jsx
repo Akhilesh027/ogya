@@ -17,17 +17,13 @@ const HomePage = () => {
       </div>
 
       <div className="offers">
-        <div className="scrolling-container">
-          <div className="scrolling-text">
-            Special Offers! Get <span className="highlight">20% off</span> on your first purchase. Free shipping on orders over{" "}
-            <span className="highlight">₹500</span>. Limited time only! &nbsp; &nbsp; Special Offers! Get{" "}
-            <span className="highlight">20% off</span> on your first purchase. Free shipping on orders over{" "}
-            <span className="highlight">₹500</span>. Limited time only! &nbsp; &nbsp; Special Offers! Get{" "}
-            <span className="highlight">20% off</span> on your first purchase. Free shipping on orders over{" "}
-            <span className="highlight">₹500</span>. Limited time only!
-          </div>
-        </div>
-      </div>
+  <div className="scrolling-container">
+    <div className="scrolling-text">
+      Navaratri Exclusive - Shop Now & Save Big This Festive Season! &nbsp; &nbsp; Navaratri Exclusive - Shop Now & Save Big This Festive Season! &nbsp; &nbsp; Navaratri Exclusive - Shop Now & Save Big This Festive Season!
+    </div>
+  </div>
+</div>
+
 
       <div className="offerposter">
         <ComboOffers />
