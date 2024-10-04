@@ -1,44 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import ProductsPage from "./ProductsPage";
 import ReviewPage from "./ReviewPage";
-import Footer from "./footer";
 import video from "./Images/video.mp4";
 import "./Home.css"; // Make sure to include this for styling
 import { Link } from "react-router-dom";
 import image from "./Images/about.jpg";
 import ComboOffers from "./ComboOffers";
-import chat from './Images/chat.svg'
-import sale from './Images/Sale.png'
+import chat from './Images/chat.svg';
+import sale from './Images/Sale.png';
+
 const HomePage = () => {
+  const [showCombo, setShowCombo] = useState(false); // State to control combo offer visibility
+
+  const handleShowCombo = () => {
+    setShowCombo(!showCombo); // Toggle the state on button click
+  };
+
   return (
     <div className="home-page">
-      <div className="video-section">
-        {/* Added playsInline to ensure the video plays inline on iOS */}
-        <video src={video} autoPlay muted loop playsInline></video>
-      </div>
+      <header className="video-section">
+        <video src={video} autoPlay muted loop playsInline>
+          Your browser does not support the video tag.
+        </video>
+      </header>
 
-      <div className="offers">
-  <div className="scrolling-container">
-    <div className="scrolling-text">
-      Navaratri Exclusive - Shop Now & Save Big This Festive Season! &nbsp; &nbsp; Navaratri Exclusive - Shop Now & Save Big This Festive Season! &nbsp; &nbsp; Navaratri Exclusive - Shop Now & Save Big This Festive Season!
-    </div>
-  </div>
-</div>
-
-
-      <div className="offerposter">
-        <Link to='/combo'><img src={sale} alt="slae" /></Link>
-      </div>
-
-      <div className="products-section">
-        <ProductsPage />
-      </div>
-
-      <div className="why-choose-us">
-        <div className="hero-section">
-          <h1>Why Choose Ogya Agarbathi?</h1>
-          <p>Your trusted source for natural and authentic incense sticks.</p>
+      <section className="offers">
+        <div className="scrolling-container">
+          <div className="scrolling-text">
+            Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
+            &nbsp; &nbsp; Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
+            &nbsp; &nbsp; Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
+          </div>
         </div>
+      </section>
+
+      <section className="offerposter">
+        <img src={sale} className='poster' alt="Special Sale Promotion" />
+        <ComboOffers/>
+      </section>
+
+      <section className="products-section">
+        <ProductsPage />
+      </section>
+
+      <section className="why-choose-us">
+        <h1>Why Choose Ogya Agarbathi?</h1>
+        <p>Your trusted source for natural and authentic incense sticks.</p>
 
         <div className="content-section">
           <div className="text-content">
@@ -53,7 +60,6 @@ const HomePage = () => {
               <li><strong>Handcrafted Quality:</strong> Each incense stick is carefully crafted to deliver the best in fragrance and quality.</li>
             </ul>
           </div>
-
           <div className="image-content">
             <img src={image} alt="Unique Selling Proposition" />
           </div>
@@ -70,21 +76,21 @@ const HomePage = () => {
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="review-section">
+      <section className="review-section">
         <ReviewPage />
-      </div>
+      </section>
 
       {/* WhatsApp Chat Section */}
       <div className="chatwithus">
         <a
-          href="https://wa.me/yourphonenumber"
+          href="https://wa.me/+919550379505" // Update with your actual phone number
           target="_blank"
           rel="noopener noreferrer"
           className="whatsapp-link"
         >
-          <img src={chat} alt="" />
+          <img src={chat} alt="Chat with us on WhatsApp" />
         </a>
       </div>
 

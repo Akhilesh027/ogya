@@ -98,9 +98,7 @@ const About = () => {
         </p>
       </div>
     </div>
-    <div className="cta-section">
-      <button className="cta-button">Learn More</button>
-    </div>
+  
   </div>
   </>
   );

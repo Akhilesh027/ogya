@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage';
 import CartPage from './pages/CartPage';
 import BillingPage from './pages/BillingPage';
 import Navbar from './pages/Navbar';
-
 import './App.css'
 import Products from './pages/product';
 import Productshow from './pages/productshow';
@@ -20,6 +19,7 @@ import ProfilePage from './pages/Profile';
 import ConfirmationPage from './pages/orderConform';
 import OfferDetails from './pages/OfferShow';
 import ComboOffers from './pages/ComboOffers';
+import SearchPage from './pages/search';
 const App = () => {
     return (
         <Router>
@@ -40,6 +40,8 @@ const App = () => {
                 <Route path="/checkout/*" element={<Checkout />} />
                 <Route path="/confirmation" element={<ConfirmationPage />} />
                 <Route path='/combo' element={<ComboOffers/>}/>
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/product/:id" element={<Productshow />} />
             </Routes>
             <Footer/>
         </Router>
