@@ -29,7 +29,7 @@ const RegistrationPage = () => {
     setLoading(true);  // Start loading when the button is clicked
     try {
       await axios.post('https://ogya.onrender.com/api/register', formData);
-      navigate('/login');
+      navigate('/');
     } catch (error) {
       console.error('Registration error:', error);
     } finally {
