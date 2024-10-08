@@ -79,24 +79,14 @@ const Navbar = () => {
             <FaSearch color="white" size={20} />
           </Link>
           {isLoggedIn ? (
-    <>
-        {/* Display the user icon if logged in */}
-        <Link to="/profile">
-            <FaUser color="white" size={20} />
-        </Link>
-        <button id='logout' className="loginbtn" onClick={handleLogout}>
-            Logout
-        </button>
-    </>
-) : (
-    <>
-        {/* Display login button if not logged in */}
-        <Link className='link' id='login' to='/login'>
-            <button className='loginbtn'>Login</button>
-        </Link>
-    </>
-)}
-
+            <>
+              <FaUser color="white" size={20} />
+            </>
+          ) : (
+            <Link className="link" to="/login">
+              <button className="loginbtn">Login</button>
+            </Link>
+          )}
         </div>
         <div className={`links ${isMenuOpen ? "active" : ""}`}>
           <Link to="/" className="link" onClick={closeMenu}>

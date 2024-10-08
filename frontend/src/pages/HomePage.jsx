@@ -85,7 +85,7 @@ const HomePage = () => {
       {/* WhatsApp Chat Section */}
       <div className="chatwithus">
         <a
-          href="https://wa.me/+919550379505" // Update with your actual phone number
+          href="https://wa.me/+919100881764" // Update with your actual phone number
           target="_blank"
           rel="noopener noreferrer"
           className="whatsapp-link"

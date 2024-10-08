@@ -21,17 +21,25 @@ const Buy = () => {
 
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [isPayPalLoaded, setIsPayPalLoaded] = useState(false);
-    const [loading, setLoading] = useState(false); // New loading state
+    const [loading, setLoading] = useState(false); // Loading state
+    const [deliveryCharge, setDeliveryCharge] = useState(0); // New state for delivery charge
 
     const location = useLocation();
     const { cartItems, totalAmount } = location.state || { cartItems: [], totalAmount: 0 };
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Apply delivery charge if totalAmount is less than 500
+        if (totalAmount < 500) {
+            setDeliveryCharge(50);
+        } else {
+            setDeliveryCharge(0); // No charge for orders above or equal to 500
+        }
+
         if (paymentMethod === 'paypal') {
             loadPayPalScript();
         }
-    }, [paymentMethod]);
+    }, [totalAmount, paymentMethod]);
 
     const loadPayPalScript = () => {
         if (window.paypal) {
@@ -84,7 +92,7 @@ const Buy = () => {
                 paymentMethod: 'Cash on Delivery',
                 paymentStatus: 'Pending',
                 transactionId: null,
-                amount: totalAmount
+                amount: totalAmount + deliveryCharge // Include delivery charge
             });
         }
     };
@@ -92,7 +100,7 @@ const Buy = () => {
     const handleRazorpayPayment = () => {
         const options = {
             key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key ID
-            amount: totalAmount * 100,
+            amount: (totalAmount + deliveryCharge) * 100, // Include delivery charge
             currency: "INR",
             name: "Your Company",
             description: "Test Transaction",
@@ -103,7 +111,7 @@ const Buy = () => {
                     paymentMethod: 'Razorpay',
                     paymentStatus: 'Completed',
                     transactionId: response.razorpay_payment_id,
-                    amount: totalAmount
+                    amount: totalAmount + deliveryCharge // Include delivery charge
                 });
             },
             prefill: {
@@ -274,14 +282,15 @@ const Buy = () => {
                             ))}
                             <div className="order-shipping">
                                 <div>Shipping</div>
-                                <div>Free shipping</div>
+                                <div>{deliveryCharge > 0 ? '₹50' : 'Free shipping'}</div> {/* Apply delivery charge */}
                             </div>
                             <div className="order-total">
                                 <div>Total</div>
-                                <div>₹{totalAmount}</div>
+                                <div>₹{totalAmount + deliveryCharge}</div> {/* Total with delivery charge */}
                             </div>
                         </div>
                     )}
+
 
                     <div className="payment-page">
                         <h2>Payment Options</h2>
