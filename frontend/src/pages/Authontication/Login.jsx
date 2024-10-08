@@ -21,18 +21,37 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('https://ogya.onrender.com/login', formData);
-        const { token, userId } = response.data;
-        
-        // Store token and userId in localStorage
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', response.data.userId);
-        
-        navigate('/'); // Redirect to home after login
+      // Send login request to the backend
+      const response = await axios.post('https://ogya.onrender.com/login', formData);
+      
+      // Log the response to see if the userId is present
+      console.log('Login response:', response.data);
+  
+      const { token, role, userId } = response.data; // Extract token, role, and userId from the response
+  
+      // Check if userId is undefined
+      if (!userId) {
+        console.error('User ID is undefined!');
+        return;
+      }
+  
+      // Store the token and userId in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId); // Store userId in local storage
+  
+      console.log('Logged in User ID:', userId); // Console log the user ID after login
+  
+      // Navigate based on role
+      if (role === 'admin') {
+        navigate('/admin'); // Redirect to admin dashboard
+      } else {
+        navigate('/'); // Redirect to user home
+      }
     } catch (error) {
-        console.error('Login error:', error);
+      console.error('Login error:', error);
     }
-};
+  };
+  
 
 
   return (

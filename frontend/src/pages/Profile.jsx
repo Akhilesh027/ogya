@@ -14,7 +14,7 @@ const ProfilePage = () => {
         const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('token'); // Get the token from local storage
-                
+                const userId = localStorage.getItem('userId')
                 // Check if userId is available
                 if (!userId) {
                     throw new Error('User ID not found');
@@ -50,6 +50,7 @@ const ProfilePage = () => {
     return (
         <div className="profile-page">
             <h2>User Profile</h2>
+            {userId}
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (

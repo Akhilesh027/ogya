@@ -83,7 +83,7 @@ const sendEmail = async (to, subject, text) => {
     });
 
     let mailOptions = {
-      from: 'ogya034@gmail.com', // Replace with your email
+      from: 'ogya034@gmail@gmail.com', // Replace with your email
       to: to,
       subject: subject,
       text: text,
@@ -127,28 +127,29 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-      // Find user by username
-      const user = await User.findOne({ where: { username } });
-      if (!user) {
-          return res.status(400).json({ error: 'Invalid username or password' });
-      }
+    // Find user by username
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
 
-      // Compare provided password with stored hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-          return res.status(400).json({ error: 'Invalid username or password' });
-      }
+    // Compare provided password with stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: user.id }, 'bannu9', { expiresIn: '1h' });
-      
-      // Send response with token and user information
-      res.json({ token, username: user.username, userId: user.id });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user.id }, 'BANNU9', { expiresIn: '1h' });
+
+    // Send the token, role, and userId to the frontend
+    res.json({ token, role: user.role, userId: user.id });
   } catch (error) {
-      console.error('Login error:', error); // Log the error for debugging
-      res.status(500).json({ error: 'Login failed' });
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
   }
 });
+
 
 // Protecting routes: Example middleware for checking token
 const verifyToken = (req, res, next) => {
@@ -163,11 +164,11 @@ const verifyToken = (req, res, next) => {
 };
 app.get('/users/:id', async (req, res) => {
   try {
-      const userId = req.params.id; // Get user ID from request parameters
+      const userId = req.id; // Get user ID from request parameters
 
       // Fetch user from the database using Sequelize
       const user = await User.findByPk(userId);
-
+    console.log(userId)
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
       }
@@ -401,14 +402,14 @@ const sendAdminNotification = async (firstName, amount, transactionId) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'ogya034@gmail.com', // Replace with your email
+        user: 'ogya034@gmail@gmail.com', // Replace with your email
         pass: 'oxyl xyfs qako bldv', // Replace with your email password
       },
     });
 
     let mailOptions = {
-      from: 'ogya034@gmail.com', // Replace with your email
-      to: 'ogya034@gmail.com', // Replace with admin's email
+      from: 'ogya034@gmail@gmail.com', // Replace with your email
+      to: 'ogya034@gmail@gmail.com', // Replace with admin's email
       subject: 'New Payment Received',
       text: `A new payment has been received:
              Name: ${firstName}
@@ -512,7 +513,7 @@ Your Company Name
 Phone Number: [Your Contact Number]
 Email: [Your Company Email]`;
 
-      await sendEmail('ogya034@gmail.com', subject, text);
+      await sendEmail('ogya034@gmail@gmail.com', subject, text);
 
       res.json({ message: 'Order status updated successfully', order });
   } catch (error) {
@@ -551,7 +552,7 @@ app.post('/api/contact', async (req, res) => {
                   Email: ${email}
                   Phone Number: ${phonenumber}`;
     
-    await sendEmail('ogya034@gmail.com', subject, text);
+    await sendEmail('ogya034@gmail@gmail.com', subject, text);
 
     res.status(200).json({ message: 'Message sent successfully!' });
   } catch (error) {
