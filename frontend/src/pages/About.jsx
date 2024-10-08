@@ -1,6 +1,7 @@
 import React from "react";
 import "./About.css"; // Import the CSS file for styling
-import aboutImg from './Images/about.jpg'
+import aboutImg from './Images/rose.png'
+import img from './Images/mogra.png'
 const About = () => {
   return (
     <>
@@ -84,7 +85,7 @@ const About = () => {
         </ul>
       </div>
       <div className="image-content">
-        <img src={aboutImg} alt="Unique Selling Proposition" />
+        <img src={img} alt="Unique Selling Proposition" />
       </div>
     </div>
     <div className="content-section">

@@ -6,14 +6,14 @@ const testimonials = [
     name: 'Kishore Reddy',
     occupation: 'Corporate Professional',
     image: prof, 
-    quote: 'Redefining Millet Meal Options!! Honestly, I have never been a big millet fan until I got introduced to the Fittr Millet Khichdi & Dosa mix. Now, I am totally in love with these products. Ease of cooking and excellent taste makes it a perfect complex carb to add to your meal. Highly recommend them.',
+    quote: 'The Ogya Agarabathi incense sticks are a perfect blend of tradition and soothing fragrance, crafted to elevate your environment with natural, calming aromas. Each stick is made from high-quality ingredients, ensuring a long-lasting burn time with minimal smoke, making it ideal for meditation, prayer, or simply refreshing your space.',
     rating: 5 
   },
   {
     name: 'Nikitha',
     occupation: 'Fashion Designer',
     image: prof, 
-    quote: 'I tried the Fittr Millets Masala khichdi mix, it has become my favourite meal on the go. It keeps me full for a long time. It’s nutritious, easy to make, and guilt-free. It tastes good too. I love the product and it’s a must-try!',
+    quote: "Ogya Agarabathi incense sticks offer a premium experience at an affordable price. Whether you're using them for spiritual purposes or to simply enjoy a fragrant home, Ogya Agarabathi delivers on quality, fragrance, and overall satisfaction.",
     rating: 4 
   }
 ];

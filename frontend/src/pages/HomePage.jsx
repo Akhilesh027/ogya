@@ -4,7 +4,8 @@ import ReviewPage from "./ReviewPage";
 import video from "./Images/video.mp4";
 import "./Home.css"; // Make sure to include this for styling
 import { Link } from "react-router-dom";
-import image from "./Images/about.jpg";
+import image from "./Images/1.jpg";
+import image1 from "./Images/2.jpg";
 import ComboOffers from "./ComboOffers";
 import chat from './Images/chat.svg';
 import sale from './Images/Sale.png';
@@ -67,7 +68,7 @@ const HomePage = () => {
 
         <div className="content-section">
           <div className="image-content">
-            <img src={image} alt="Our Values" />
+            <img src={image1} alt="Our Values" />
           </div>
           <div className="text-content">
             <h2>Enhance Your Well-Being</h2>

@@ -28,7 +28,7 @@ const RegistrationPage = () => {
     e.preventDefault();
     setLoading(true);  // Start loading when the button is clicked
     try {
-      await axios.post('https://ogya.onrender.com/api/register', formData);
+      await axios.post('https://ogya.onrender.com/register', formData);
       navigate('/');
     } catch (error) {
       console.error('Registration error:', error);

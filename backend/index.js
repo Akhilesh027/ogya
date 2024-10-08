@@ -77,8 +77,8 @@ const sendEmail = async (to, subject, text) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'bannureddykallem@gmail.com', // Replace with your email
-        pass: 'oxyl xyfs qako bldv', // Replace with your email password
+        user: 'ogya034@gmail.com', // Replace with your email
+        pass: 'cruc jcey fqjy yqmd', // Replace with your email password
       },
     });
 
@@ -127,24 +127,26 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Find user by username
-    const user = await User.findOne({ where: { username } });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
+      // Find user by username
+      const user = await User.findOne({ where: { username } });
+      if (!user) {
+          return res.status(400).json({ error: 'Invalid username or password' });
+      }
 
-    // Compare provided password with stored hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid username or password' });
-    }
+      // Compare provided password with stored hashed password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Invalid username or password' });
+      }
 
-    // Generate JWT token
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, username: user.username, userId: user.id });
+      // Generate JWT token
+      const token = jwt.sign({ userId: user.id }, 'bannu9', { expiresIn: '1h' });
+      
+      // Send response with token and user information
+      res.json({ token, username: user.username, userId: user.id });
   } catch (error) {
-    console.error('Login error:', error); // Log the error for debugging
-    res.status(500).json({ error: 'Login failed' });
+      console.error('Login error:', error); // Log the error for debugging
+      res.status(500).json({ error: 'Login failed' });
   }
 });
 
@@ -159,6 +161,31 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+app.get('/users/:id', async (req, res) => {
+  try {
+      const userId = req.params.id; // Get user ID from request parameters
+
+      // Fetch user from the database using Sequelize
+      const user = await User.findByPk(userId);
+
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Respond with user details
+      res.json({
+          id: user.userId, // Adjust based on your model
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          mobileNo: user.mobileNo,
+      });
+  } catch (error) {
+      console.error('Error fetching user details:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // Get user details
 app.get('/me', async (req, res) => {

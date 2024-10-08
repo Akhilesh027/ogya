@@ -17,7 +17,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
   const [isSearchOpen, setIsSearchOpen] = useState(false); // Search bar visibility
   const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
-
+  const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
   // Search suggestions array
@@ -80,7 +80,9 @@ const Navbar = () => {
           </Link>
           {isLoggedIn ? (
             <>
-              <FaUser color="white" size={20} />
+              <Link to={`/profile/${userId}`}>
+                <FaUser color="white" size={20} />
+            </Link>
             </>
           ) : (
             <Link className="link" to="/login">
@@ -115,9 +117,9 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <>
                   {/* Display the user icon if logged in */}
-                  <Link to="/profile">
-                    <FaUser color="white" size={20} />
-                  </Link>
+                  <Link to={`/profile/${userId}`}>
+                <FaUser color="white" size={20} />
+            </Link>
                   <button
                     id="logout"
                     className="loginbtn"

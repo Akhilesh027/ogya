@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import './styles.css'; // Import CSS file
 import loginimg from '../Images/about.jpg';
 
-const LoginPage = () => {
+const LoginPage = () => { 
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,20 +21,19 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://ogya.onrender.com/login', formData);
-      const { token, role } = response.data;
-      localStorage.setItem('token', token);
-
-      // Navigate based on role
-      if (role === 'admin') {
-        navigate('/admin'); // Redirect to admin dashboard
-      } else {
-        navigate('/'); // Redirect to user home
-      }
+        const response = await axios.post('https://ogya.onrender.com/login', formData);
+        const { token, userId } = response.data;
+        
+        // Store token and userId in localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', response.data.userId);
+        
+        navigate('/'); // Redirect to home after login
     } catch (error) {
-      console.error('Login error:', error);
+        console.error('Login error:', error);
     }
-  };
+};
+
 
   return (
     <div className="login">
@@ -55,7 +56,8 @@ const LoginPage = () => {
             onChange={handleChange}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
+          {error && <p className="error-message">{error}</p>} {/* Display error message */}
           <div className="link-container">
             <p>Don't have an account? <a href="/register">Register here</a></p>
           </div>
