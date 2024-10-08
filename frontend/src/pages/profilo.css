@@ -1,0 +1,62 @@
+/* Profile Page Styles */
+.profile {
+    max-width: 600px; /* Maximum width for the profile container */
+    margin: 20px auto; /* Center the profile container */
+    padding: 20px; /* Padding inside the container */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .profile h2 {
+    text-align: center; /* Center the heading */
+    color: #333; /* Darker text color for the heading */
+    font-family: 'Arial', sans-serif; /* Font family for the heading */
+    margin-bottom: 20px; /* Space below the heading */
+  }
+  
+  .profile p {
+    font-size: 16px; /* Font size for profile details */
+    line-height: 1.6; /* Space between lines for readability */
+    color: #555; /* Gray text color for the details */
+    margin: 10px 0; /* Vertical margin for paragraphs */
+    padding: 10px; /* Padding for each paragraph */
+    border-left: 4px solid #007bff; /* Left border to highlight each detail */
+    background-color: #fff; /* White background for paragraphs */
+    border-radius: 4px; /* Rounded corners for each detail box */
+  }
+  
+  .profile strong {
+    color: #007bff; /* Blue color for the labels */
+  }
+  .logout-button {
+    margin-top: 20px; /* Add margin above the button */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 16px; /* Font size for button text */
+    color: white; /* Text color */
+    background-color: #007bff; /* Button background color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
+  
+  .logout-button:hover {
+    background-color: #0056b3; /* Darker background on hover */
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .profile {
+      padding: 15px; /* Reduce padding on smaller screens */
+    }
+  
+    .profile h2 {
+      font-size: 1.5em; /* Slightly smaller heading */
+    }
+  
+    .profile p {
+      font-size: 14px; /* Reduce font size for paragraphs */
+    }
+  }
+  

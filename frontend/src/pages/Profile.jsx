@@ -1,73 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ProfilePage.css';
+import './profilo.css';
 
 const ProfilePage = () => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-    const { userId } = useParams(); // Use useParams here to get the userId
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState('');
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const token = localStorage.getItem('token'); // Get the token from local storage
-                const userId = localStorage.getItem('userId')
-                // Check if userId is available
-                if (!userId) {
-                    throw new Error('User ID not found');
-                }
+  // Fetch user profile on component mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('token'); // Get the token from localStorage
+        if (!token) {
+          setError('User is not authenticated');
+          return;
+        }
 
-                // Fetch user details using the user ID
-                const response = await axios.get(`http://localhost:5000/users/${userId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                
-                setUser(response.data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setError('Failed to fetch user data. Please try again.');
-                // Optionally redirect to login if unauthorized
-                if (error.response && error.response.status === 401) {
-                    navigate('/login');
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
+        const response = await axios.get('https://ogya.onrender.com/profile', {
+          headers: {
+            Authorization: token // Pass token in Authorization header
+          }
+        });
 
-        fetchUserData();
-    }, [navigate, userId]); // Add userId as a dependency
-
-    const handleLogout = () => {
-        localStorage.removeItem('token'); // Clear the token
-        localStorage.removeItem('userId'); // Clear the user ID
-        navigate('/login'); // Redirect to login page after logout
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        setError('Failed to fetch user profile');
+      }
     };
 
-    return (
-        <div className="profile-page">
-            <h2>User Profile</h2>
-            {userId}
-            {loading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <p className="error-message">{error}</p> // Display error message
-            ) : (
-                user && (
-                    <div className="user-details">
-                        <h3>{user.username}</h3>
-                        <p>Email: {user.email}</p>
-                        <p>Name: {user.firstName} {user.lastName}</p>
-                        <p>Phone Number: {user.mobileNo}</p>
-                        <button className="logout-btn" onClick={handleLogout}>Logout</button>
-                    </div>
-                )
-            )}
-        </div>
-    );
+    fetchUserProfile();
+  }, []);
+
+  const handleLogout = () => {
+    // Remove token and userId from local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    
+    // Redirect to the login page
+    window.location.href = '/login'; // Change this to the route of your login page
+  };
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!userData) {
+    return <p>Loading user data...</p>;
+  }
+
+  return (
+    <div className="profile">
+      <p><strong>Username:</strong> {userData.username}</p>
+      <p><strong>Email:</strong> {userData.email}</p>
+      <p><strong>First Name:</strong> {userData.firstName}</p>
+      <p><strong>Last Name:</strong> {userData.lastName}</p>
+      <p><strong>Mobile No:</strong> {userData.mobileNo}</p>
+      
+      <button onClick={handleLogout} className="logout-button">
+        Logout
+      </button>
+    </div>
+  );
 };
 
 export default ProfilePage;

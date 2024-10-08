@@ -127,23 +127,20 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Find user by username
     const user = await User.findOne({ where: { username } });
     if (!user) {
       return res.status(400).json({ error: 'Invalid username or password' });
     }
 
-    // Compare provided password with stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ error: 'Invalid username or password' });
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user.id }, 'BANNU9', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.userId }, 'bannu9', { expiresIn: '1h' });
 
-    // Send the token, role, and userId to the frontend
-    res.json({ token, role: user.role, userId: user.id });
+    res.json({ token, username: user.username, userId: user.userId });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
@@ -152,41 +149,44 @@ app.post('/login', async (req, res) => {
 
 
 // Protecting routes: Example middleware for checking token
+// Verify token middleware for protected routes
 const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
-  if (!token) return res.status(403).send({ message: 'No token provided.' });
+  if (!token) return res.status(403).json({ message: 'No token provided' });
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(500).send({ message: 'Failed to authenticate token.' });
+  jwt.verify(token, 'bannu9', (err, decoded) => {
+    if (err) return res.status(500).json({ message: 'Failed to authenticate token' });
     req.userId = decoded.userId; // Save user ID for use in other routes
     next();
   });
 };
-app.get('/users/:id', async (req, res) => {
+
+// Route to get user details (profile) by userId from token
+app.get('/profile', verifyToken, async (req, res) => {
   try {
-      const userId = req.id; // Get user ID from request parameters
+    const userId = req.userId; // Extracted from token
 
-      // Fetch user from the database using Sequelize
-      const user = await User.findByPk(userId);
-    console.log(userId)
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+    // Fetch user from the database using Sequelize
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-      // Respond with user details
-      res.json({
-          id: user.userId, // Adjust based on your model
-          username: user.username,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mobileNo: user.mobileNo,
-      });
+    // Respond with user details
+    res.json({
+      id: user.userId,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      mobileNo: user.mobileNo,
+    });
   } catch (error) {
-      console.error('Error fetching user details:', error);
-      res.status(500).json({ error: 'Internal server error' });
+    console.error('Error fetching user details:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // Get user details
 app.get('/me', async (req, res) => {

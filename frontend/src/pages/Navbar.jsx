@@ -80,7 +80,7 @@ const Navbar = () => {
           </Link>
           {isLoggedIn ? (
             <>
-              <Link to={`/profile/${userId}`}>
+              <Link to={`/profile`}>
                 <FaUser color="white" size={20} />
             </Link>
             </>
@@ -117,7 +117,7 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <>
                   {/* Display the user icon if logged in */}
-                  <Link to={`/profile/${userId}`}>
+                  <Link to={`/profile`}>
                 <FaUser color="white" size={20} />
             </Link>
                   <button
