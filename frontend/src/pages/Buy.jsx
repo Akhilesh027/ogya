@@ -17,39 +17,28 @@ const Buy = () => {
         pinCode: "",
         phone: "",
         email: "",
+        userId: ""
     });
 
     const [paymentMethod, setPaymentMethod] = useState('cod');
-    const [isPayPalLoaded, setIsPayPalLoaded] = useState(false);
-    const [loading, setLoading] = useState(false); // Loading state
-    const [deliveryCharge, setDeliveryCharge] = useState(0); // New state for delivery charge
+    const [loading, setLoading] = useState(false);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
 
     const location = useLocation();
-    const { cartItems, totalAmount } = location.state || { cartItems: [], totalAmount: 0 };
+    const { cartItems, totalAmount, userId } = location.state || { cartItems: [], totalAmount: 0, userId: null };
     const navigate = useNavigate();
 
     useEffect(() => {
         // Apply delivery charge if totalAmount is less than 500
-        if (totalAmount < 500) {
-            setDeliveryCharge(50);
-        } else {
-            setDeliveryCharge(0); // No charge for orders above or equal to 500
-        }
+        setDeliveryCharge(totalAmount < 500 ? 50 : 0);
+        // Load Razorpay script
+        loadRazorpayScript();
+    }, [totalAmount]);
 
-        if (paymentMethod === 'paypal') {
-            loadPayPalScript();
-        }
-    }, [totalAmount, paymentMethod]);
-
-    const loadPayPalScript = () => {
-        if (window.paypal) {
-            setIsPayPalLoaded(true);
-            return;
-        }
-
+    const loadRazorpayScript = () => {
         const script = document.createElement('script');
-        script.src = "https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID"; // Replace with your PayPal client ID
-        script.onload = () => setIsPayPalLoaded(true);
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => console.log("Razorpay script loaded");
         document.body.appendChild(script);
     };
 
@@ -61,12 +50,11 @@ const Buy = () => {
         setPaymentMethod(e.target.value);
     };
 
-    const handlePaymentSuccess = (paymentDetails) => {
-        // Handle payment success and submit order details to the backend
-        submitOrder(paymentDetails);
+    const generateRandomOrderId = () => {
+        return 'ORDER_' + Math.floor(Math.random() * 1000000000);
     };
 
-    const handlePayment = (event) => {
+    const handlePayment = async (event) => {
         event.preventDefault();
 
         if (!paymentMethod) {
@@ -74,105 +62,105 @@ const Buy = () => {
             return;
         }
 
-        setLoading(true); // Show loading spinner
+        setLoading(true);
 
         if (paymentMethod === 'razorpay') {
-            handleRazorpayPayment();
-        } else if (paymentMethod === 'paypal') {
-            if (!isPayPalLoaded) {
-                alert('PayPal is not loaded yet. Please try again.');
-                setLoading(false); // Hide loading spinner
-                return;
-            }
-            handlePayPalPayment();
+            await handleRazorpayPayment();
         } else if (paymentMethod === 'cod') {
-            console.log('Cash on Delivery selected');
-            handlePaymentSuccess({
-                orderId: Date.now(),
+            const paymentDetails = {
+                orderId: generateRandomOrderId(), // Unique order ID for COD
                 paymentMethod: 'Cash on Delivery',
-                paymentStatus: 'Pending',
-                transactionId: null,
-                amount: totalAmount + deliveryCharge // Include delivery charge
-            });
+                paymentStatus: 'Confirmed', // Set to confirmed for COD
+                transactionId: null, // No transaction ID for COD
+                amount: totalAmount + deliveryCharge // Correct calculation
+            };
+            await submitOrder(paymentDetails); // Submit order with payment details
         }
     };
 
-    const handleRazorpayPayment = () => {
-        const options = {
-            key: "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key ID
-            amount: (totalAmount + deliveryCharge) * 100, // Include delivery charge
-            currency: "INR",
-            name: "Your Company",
-            description: "Test Transaction",
-            handler: function (response) {
-                console.log("Razorpay Payment Success:", response);
-                handlePaymentSuccess({
-                    orderId: response.razorpay_order_id,
-                    paymentMethod: 'Razorpay',
-                    paymentStatus: 'Completed',
-                    transactionId: response.razorpay_payment_id,
-                    amount: totalAmount + deliveryCharge // Include delivery charge
-                });
-            },
-            prefill: {
-                name: `${formData.firstName} ${formData.lastName}`,
-                email: formData.email,
-                contact: formData.phone,
-            },
-            theme: {
-                color: "#3399cc"
-            }
-        };
+    const handleRazorpayPayment = async () => {
+        try {
+            // Create an order on the backend
+            const { data: orderData } = await axios.post('https://ogya.onrender.com/api/create-order', {
+                ...formData,
+                userId: userId, // Include userId in the order creation
+                amount: (totalAmount + deliveryCharge) * 100 // Convert to paise for Razorpay
+            });
 
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
-    };
+            // Initiate Razorpay payment
+            const options = {
+                key: 'rzp_live_qO97ytpJFY75xi', // Your Razorpay key ID
+                amount: orderData.amount, // Amount in paise
+                currency: orderData.currency,
+                name: 'Your Company Name', // Your company name
+                description: 'Payment for order',
+                order_id: orderData.orderId, // This is the order ID you got from the backend
+                handler: async (response) => {
+                    try {
+                        // Payment successful
+                        const verificationResponse = await axios.post('https://ogya.onrender.com/api/payment/verify', {
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_signature: response.razorpay_signature,
+                        });
 
-    const handlePayPalPayment = () => {
-        window.paypal.Buttons({
-            createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            currency_code: "USD",
-                            value: (totalAmount / 74).toFixed(2) // Convert INR to USD, approximate conversion rate
+                        if (verificationResponse.status === 200) {
+                            // After successful payment, submit the order
+                            const paymentDetails = {
+                                orderId: orderData.orderId, // Use Razorpay order ID
+                                paymentMethod: 'Razorpay',
+                                paymentStatus: 'Completed', // Set status as completed
+                                transactionId: response.razorpay_payment_id, // Store payment ID
+                                amount: orderData.amount / 100, // Convert back to original amount
+                            };
+
+                            // Submit order to API
+                            await submitOrder(paymentDetails); // Submit order with payment details
+                            alert('Payment successful!');
+                        } else {
+                            alert('Payment verification failed.');
                         }
-                    }]
-                });
-            },
-            onApprove: function (data, actions) {
-                return actions.order.capture().then(function (details) {
-                    console.log("PayPal Payment Success:", details);
-                    handlePaymentSuccess({
-                        orderId: details.id,
-                        paymentMethod: 'PayPal',
-                        paymentStatus: 'Completed',
-                        transactionId: details.id,
-                        amount: (totalAmount / 74).toFixed(2) // Convert INR to USD
-                    });
-                });
-            }
-        }).render('#paypal-button-container');
+                    } catch (error) {
+                        console.error('Error during payment verification:', error);
+                        alert('Payment verification failed. Please try again.');
+                    }
+                },
+                prefill: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    contact: formData.phone,
+                },
+            };
+
+            const razorpay = new window.Razorpay(options);
+            razorpay.open();
+        } catch (error) {
+            console.error('Error during payment process:', error);
+            alert('Payment failed. Please try again.');
+            setLoading(false); // Hide loading spinner on error
+        }
     };
 
     const submitOrder = async (paymentDetails) => {
         try {
             const orderData = {
                 ...formData,
+                userId: userId || formData.userId, // Include userId in the order submission, fallback to formData.userId
                 paymentMethod: paymentDetails.paymentMethod,
                 transactionId: paymentDetails.transactionId,
                 paymentStatus: paymentDetails.paymentStatus,
                 amount: paymentDetails.amount
             };
 
-            const response = await axios.post('https://ogya.onrender.com/api/billing', orderData);
+            const response = await axios.post('https://ogya.onrender.com/api/order', orderData);
 
             if (response.status === 201) {
-                setLoading(false); // Hide loading spinner
-                navigate('/confirmation', { state: { orderDetails: response.data } }); // Redirect to confirmation page
+                setLoading(false);
+                navigate('/confirmation', { state: { orderDetails: response.data } });
             }
         } catch (error) {
             console.error('Error recording order details:', error);
+            alert('Failed to record order details. Please try again.'); // Inform the user
             setLoading(false); // Hide loading spinner on error
         }
     };
@@ -192,7 +180,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Last name *</label>
                     <input
                         type="text"
@@ -201,7 +188,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Country / Region *</label>
                     <input
                         type="text"
@@ -210,7 +196,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Street address *</label>
                     <input
                         type="text"
@@ -219,7 +204,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Town / City *</label>
                     <input
                         type="text"
@@ -228,7 +212,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>State *</label>
                     <input
                         type="text"
@@ -237,7 +220,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>PIN Code *</label>
                     <input
                         type="text"
@@ -246,7 +228,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Phone *</label>
                     <input
                         type="text"
@@ -255,7 +236,6 @@ const Buy = () => {
                         onChange={handleChange}
                         required
                     />
-
                     <label>Email address *</label>
                     <input
                         type="email"
@@ -282,81 +262,51 @@ const Buy = () => {
                             ))}
                             <div className="order-shipping">
                                 <div>Shipping</div>
-                                <div>{deliveryCharge > 0 ? '₹50' : 'Free shipping'}</div> {/* Apply delivery charge */}
+                                <div>{deliveryCharge > 0 ? '₹' + deliveryCharge : 'Free'}</div>
                             </div>
                             <div className="order-total">
                                 <div>Total</div>
-                                <div>₹{totalAmount + deliveryCharge}</div> {/* Total with delivery charge */}
+                                <div>₹{totalAmount + deliveryCharge}</div>
                             </div>
+
                         </div>
                     )}
+                    <div className="payment-method">
+                    <h2>Payment Method</h2>
+                    <div className="payment-option">
+                        <input
+                            type="radio"
+                            id="cod"
+                            name="paymentMethod"
+                            value="cod"
+                            checked={paymentMethod === 'cod'}
+                            onChange={handlePaymentMethodChange}
+                        />
+                        <label htmlFor="cod">
+                            <img src={cod} alt="COD" /> Cash on Delivery
+                        </label>
+                    </div>
 
+                    <div className="payment-option">
+                        <input
+                            type="radio"
+                            id="razorpay"
+                            name="paymentMethod"
+                            value="razorpay"
+                            checked={paymentMethod === 'razorpay'}
+                            onChange={handlePaymentMethodChange}
+                        />
+                        <label htmlFor="razorpay">
+                            <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
+                        </label>
+                    </div>
 
-                    <div className="payment-page">
-                        <h2>Payment Options</h2>
-                        <div className="payment-method">
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="card"
-                                    checked={paymentMethod === 'card'}
-                                    onChange={handlePaymentMethodChange}
-                                />
-                                                                Card Payment
-
-                                <img src={cardimg} alt="Card Payment" />
-                            </label>
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="razorpay"
-                                    checked={paymentMethod === 'razorpay'}
-                                    onChange={handlePaymentMethodChange}
-                                />
-                                  Razorpay Payment
-                                <img src={razorpayimg} alt="Razorpay Payment" />
-                            </label>
-
-                            
-
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="cod"
-                                    checked={paymentMethod === 'cod'}
-                                    onChange={handlePaymentMethodChange}
-                                />
-                                 Cash on Delivery
-                                <img src={cod} alt="COD" />
-                            </label>
-                            
-                        </div>
-                        {paymentMethod === "card" && (
-                            <div className="card-details">
-                                <h2>Credit/Debit Card Details</h2>
-                                <label>
-                                    Card Number:
-                                    <input type="text" name="cardNumber" required />
-                                </label>
-                                <label>
-                                    Expiry Date:
-                                    <input type="text" name="expiryDate" required />
-                                </label>
-                                <label>
-                                    CVV:
-                                    <input type="text" name="cvv" required />
-                                </label>
-                            </div>
-                        )}
-                        <button type="submit" className="submit-btn">Place Order</button>
-
+                    <button type="submit" className="place-order-button" disabled={loading}>
+                        {loading ? 'Placing order...' : 'Place Order'}
+                    </button>
                     </div>
                 </div>
             </div>
-
-
-            <div id="paypal-button-container"></div>
         </form>
     );
 };

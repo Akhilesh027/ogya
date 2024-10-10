@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 const ComboOffers = () => {
   const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     // Fetch combo offers from backend API
@@ -14,11 +15,18 @@ const ComboOffers = () => {
         setOffers(response.data);
       } catch (error) {
         console.error('Error fetching combo offers:', error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchOffers();
   }, []); 
+  
+  if (loading) {
+    return <div className="loading">Loading offers...</div>; // Loading message or spinner
+  }
+
   return (
     <>
       <div className="combooffer">

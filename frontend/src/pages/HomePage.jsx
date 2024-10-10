@@ -36,7 +36,9 @@ const HomePage = () => {
       </section>
 
       <section className="offerposter">
-        <img src={sale} className='poster' alt="Special Sale Promotion" />
+   <Link to='/combo'>
+   <img src={sale} className='poster' alt="Special Sale Promotion" />
+   </Link>
         <ComboOffers/>
       </section>
 

@@ -4,7 +4,6 @@ const cors = require('cors');
 const Product = require('./Module/Product');
 const sequelize = require('./Database/db');
 const multer = require('multer');
-const Order = require('./Module/order');
 const { body, validationResult } = require('express-validator');
 const Cart = require('./Module/Cart');
 const BillingDetails = require('./Module/Billing');
@@ -18,6 +17,10 @@ const port = 5000;
 const fs = require('fs');
 const ComboOffer = require('./Module/OfferCombo');
 const { off } = require('process');
+const Razorpay = require('razorpay')
+const crypto = require('crypto'); // Make sure to import crypto if you haven't already
+const Order = require('./Module/order');
+const Payment = require('./Module/order');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -186,32 +189,6 @@ app.get('/profile', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-// Get user details
-app.get('/me', async (req, res) => {
-  try {
-    // Ensure req.user contains userId
-    const userId = 1; // Adjust if necessary
-    if (!userId) return res.status(401).json({ message: 'Unauthorized' });
-
-    const user = await User.findByPk(userId);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    res.json({
-      id: user.userId, // Adjust based on your model
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      mobileNo: user.mobileNo
-    });
-  } catch (error) {
-    console.error('Error fetching user details:', error); // Log the error for debugging
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 
 // Route to handle product creation with image upload
 app.post('/api/products', upload.array('images', 10), async (req, res) => {
@@ -424,56 +401,182 @@ const sendAdminNotification = async (firstName, amount, transactionId) => {
   }
 };
 
-app.post('/api/billing', async (req, res) => {
+
+// Get orders by userId
+app.get('/api/orders/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const orders = await Order.findAll({ where: { userId } });
+        return res.status(200).json(orders);
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        return res.status(500).json({ error: 'Error fetching orders' });
+    }
+});
+
+const razorpayInstance = new Razorpay({
+  key_id: 'rzp_live_qO97ytpJFY75xi', // Replace with your Razorpay key ID
+  key_secret: 'p6xSK9DBrJ8bOhASfmpFi2OA', // Replace with your Razorpay key secret
+});
+// Create a new order
+app.post('/api/order', async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      country,
-      streetAddress,
-      townCity,
-      state,
-      pinCode,
-      phone,
-      email,
-      paymentMethod,
-      transactionId,
-      paymentStatus,
-      amount
-    } = req.body;
+      const { userId, firstName, lastName, country, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount } = req.body;
 
-    const billingDetails = await BillingDetails.create({
-      firstName,
-      lastName,
-      country,
-      streetAddress,
-      townCity,
-      state,
-      pinCode,
-      phone,
-      email,
-      paymentMethod,
-      transactionId,
-      paymentStatus,
-      amount
-    });
+      const newOrder = await Order.create({
+          userId,  // Save userId with the order
+          firstName,
+          lastName,
+          country,
+          streetAddress,
+          townCity,
+          state,
+          pinCode,
+          phone,
+          email,
+          paymentMethod,
+          transactionId,
+          paymentStatus,
+          amount
+      });
 
-    // Send email to the user
-    await sendEmail(
-      email,
-      'Billing Successful',
-      `Dear ${firstName},\n\nYour payment of ₹${amount} was successful. Thank you for your purchase!\n\nTransaction ID: ${transactionId}\nPayment Method: ${paymentMethod}\n\nBest regards,\nYour Company Name`
-    );
-
-    // Send email notification to the admin
-    await sendAdminNotification(firstName, amount, transactionId);
-
-    res.status(201).json(billingDetails);
+      return res.status(201).json(newOrder);
   } catch (error) {
-    console.error('Error saving billing details:', error);
-    res.status(500).json({ error: 'Failed to save billing details' });
+      console.error('Error creating order:', error);
+      return res.status(500).json({ error: 'Error creating order' });
   }
 });
+
+// Create an order for Razorpay payment
+app.post('/api/create-order', async (req, res) => {
+  const { amount } = req.body; // Amount in paise
+
+  // Create Razorpay order
+  const options = {
+      amount, // Amount in paise
+      currency: 'INR',
+      receipt: 'receipt#1',
+  };
+
+  try {
+      const response = await razorpayInstance.orders.create(options);
+      return res.status(200).json({
+          orderId: response.id,
+          amount: response.amount,
+          currency: response.currency,
+      });
+  } catch (error) {
+      console.error('Error creating Razorpay order:', error);
+      return res.status(500).json({ error: 'Error creating order' });
+  }
+});
+
+// Verify Razorpay payment
+app.post('/api/payment/verify', async (req, res) => {
+  const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+
+  const expectedSignature = crypto.createHmac('sha256', 'p6xSK9DBrJ8bOhASfmpFi2OA')
+      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .digest('hex');
+
+  if (expectedSignature === razorpay_signature) {
+      return res.status(200).json({ message: 'Payment verification successful' });
+  } else {
+      return res.status(400).json({ message: 'Payment verification failed' });
+  }
+});
+
+// Billing route
+// app.post('/api/billing', async (req, res) => {
+//   try {
+//     const {
+//       firstName,
+//       lastName,
+//       country,
+//       streetAddress,
+//       townCity,
+//       state,
+//       pinCode,
+//       phone,
+//       paymentMethod,
+//       email,
+//       amount, // Amount should be in paise
+//     } = req.body;
+
+//     // Create a Razorpay order
+//     const options = {
+//       amount: amount * 100, // Convert amount to paise (100 paise = 1 INR)
+//       currency: 'INR',
+//       receipt: `receipt_order_${Math.floor(Math.random() * 1000)}`,
+//     };
+
+//     const order = await razorpayInstance.orders.create(options);
+
+//     // Prepare billing details for storage
+//     const billingDetails = {
+//       firstName,
+//       lastName,
+//       country,
+//       streetAddress,
+//       townCity,
+//       state,
+//       pinCode,
+//       phone,
+//       email,
+//       paymentMethod, // Explicitly set payment method if applicable
+//       transactionId: order.id, // Store Razorpay order ID here
+//       paymentStatus: 'Pending', // Set initial status as pending
+//       amount: order.amount, // Store amount from order creation
+//     };
+
+//     // Save billing details to the database
+//     await BillingDetails.create(billingDetails);
+
+//     // Send the order ID back to the frontend
+//     res.status(201).json({
+//       orderId: order.id,
+//       amount: order.amount,
+//       currency: order.currency,
+//       billingDetails, // Optional: send billing details if needed
+//     });
+//   } catch (error) {
+//     console.error('Error creating order:', error);
+//     res.status(500).json({ error: 'Failed to create order' });
+//   }
+// });
+
+
+// // Verify payment route
+// app.post('/api/payment/verify', (req, res) => {
+//   const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+
+//   // Verify the signature using the secret key
+//   const body = razorpay_order_id + '|' + razorpay_payment_id;
+//   const expectedSignature = crypto
+//     .createHmac('sha256', 'p6xSK9DBrJ8bOhASfmpFi2OA') // Use your actual Razorpay secret key
+//     .update(body.toString())
+//     .digest('hex');
+
+//   if (expectedSignature === razorpay_signature) {
+//     // Update billing status to successful in the database
+//     BillingDetails.update(
+//       { paymentStatus: 'Successful', transactionId: razorpay_payment_id }, // Update transaction ID
+//       { where: { transactionId: razorpay_order_id } } // Match with order ID
+//     )
+//       .then(() => {
+//         res.status(200).json({ message: 'Payment verification successful' });
+//       })
+//       .catch((error) => {
+//         console.error('Error updating billing details:', error);
+//         res.status(500).json({ error: 'Failed to update billing details' });
+//       });
+//   } else {
+//     res.status(400).json({ error: 'Payment verification failed' });
+//   }
+// });
+
+
 
 app.get('/api/billing', async (req, res) => {
   try {

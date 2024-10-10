@@ -115,7 +115,7 @@
   font-size: 18px;
   color: #fff;
   font-weight: bold;
-  animation: scroll 25s linear infinite;
+  animation: scroll 15s linear infinite;
   text-align: center;
 }
 
@@ -245,7 +245,7 @@
   }
   .offerposter .poster{
     width: 100%;
-    height: 40vh;
+    height: 35vh;
   }
 }
 

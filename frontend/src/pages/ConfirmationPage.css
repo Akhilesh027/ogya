@@ -1,82 +1,34 @@
-/* ConfirmationPage.css */
-
+/* Container for the entire page */
 .confirmation-page {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
+    max-width: 600px;
     margin: 0 auto;
-    max-width: 100%;
-    height: 100vh;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.confirmation-page h1 {
-    color: #2c3e50;
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.confirmation-page p {
-    color: #34495e;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.confirmation-page .order-details {
-    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease-in-out;
 }
 
-.confirmation-page .order-details p {
-    margin: 10px 0;
+/* Fade-in effect for the page */
+.confirmation-page.fade-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.confirmation-page .order-details .order-id {
-    font-weight: bold;
-}
-
-.confirmation-page .order-details .status {
-    color: #27ae60;
-    font-weight: bold;
-}
-
-.confirmation-page .order-summary {
+/* Order confirmed animation container */
+.confirmation-animation {
     margin-top: 20px;
-}
-
-.confirmation-page .order-summary h2 {
-    color: #2c3e50;
-    font-size: 20px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.confirmation-page .order-summary .summary-item {
-    display: flex;
-    justify-content: space-between;
-    margin: 5px 0;
-}
-
-.confirmation-page .order-summary .summary-item div {
-    font-size: 16px;
-}
-
-.confirmation-page .back-to-home {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.confirmation-page .back-to-home a {
-    text-decoration: none;
-    color: #2980b9;
-    font-size: 16px;
+    font-size: 2rem;
     font-weight: bold;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 1s ease-in-out;
 }
 
-.confirmation-page .back-to-home a:hover {
-    text-decoration: underline;
+/* Slide-in animation for order confirmation */
+.confirmation-animation.slide-in {
+    opacity: 1;
+    transform: scale(1);
 }
+
+/* Order details section */

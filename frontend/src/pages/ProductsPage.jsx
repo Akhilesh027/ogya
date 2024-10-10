@@ -5,6 +5,7 @@ import "./ProductsPage.css"; // Import the CSS file
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -18,11 +19,17 @@ const Products = () => {
         setProducts(fetchedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
+      }finally{
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []); // Empty dependency array means this effect runs once on mount
+
+  if (loading) {
+    return <div className="loading">Loading products...</div>; // Loading message or spinner
+  }
 
   return (
     <section className="products-page-home">
