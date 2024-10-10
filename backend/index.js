@@ -440,6 +440,7 @@ app.post('/api/order', async (req, res) => {
           paymentStatus,
           amount
       });
+      await sendAdminNotification(firstName, amount, transactionId || 'N/A');
 
       return res.status(201).json(newOrder);
   } catch (error) {
