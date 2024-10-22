@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import './ConfirmationPage.css';
+import Footer from './footer';
 
 const ConfirmationPage = () => {
     const location = useLocation();
@@ -38,6 +39,7 @@ const ConfirmationPage = () => {
             <div className="back-to-home">
                 <Link to="/" className="back-home-btn">Back to Home</Link>
             </div>
+            <Footer/>
         </div>
     );
 };

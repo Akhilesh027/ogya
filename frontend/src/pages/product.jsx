@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Product.css";
+import Footer from "./footer";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -58,7 +59,9 @@ const Products = () => {
           </div>
         ))}
       </div>
+      <Footer/>
     </section>
+     
   );
 };
 

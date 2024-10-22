@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './profilo.css';
+import Footer from './footer';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -50,6 +51,7 @@ const ProfilePage = () => {
   }
 
   return (
+    <>
     <div className="profile">
       <p><strong>Username:</strong> {userData.username}</p>
       <p><strong>Email:</strong> {userData.email}</p>
@@ -60,7 +62,10 @@ const ProfilePage = () => {
       <button onClick={handleLogout} className="logout-button">
         Logout
       </button>
+      
     </div>
+     <Footer/>
+    </>
   );
 };
 

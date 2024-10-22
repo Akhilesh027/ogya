@@ -38,6 +38,15 @@
   display: flex;
   gap: 20px;
 }
+.cart-quantity {
+  color: white;
+  border-radius: 50%;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  right: 135px;
+}
 
 /* Individual link styling */
 .link {
@@ -192,6 +201,15 @@
   .navLinks {
     gap: 10px;
   }
+  .cart-quantity {
+    color: white;
+    border-radius: 50%;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    position: absolute;
+    top: -15px;
+    right: 57px;
+  }
 }
 
 /* Animations */
@@ -250,7 +268,7 @@
   .navbar .logo img {
     width: 180px;
     height: 20vh;
-    left: 20%;
+    left: 26%;
     margin-top: -2.4vh;
   }
   Link{
@@ -301,10 +319,14 @@
     color: #000;
   }
   .link {
-    padding: 10px 20px;
+    padding: 7px 20px;
     color: #000;
   }
   .loginbtn{
+    position: absolute;
     padding: 7px 7px;
+    top: 29%;
+    left: -16%;
+    font-size: 16px;
   }
 }

@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaShoppingCart,
-  FaBars,
-  FaUser,
-  FaSearch,
-  FaTimes,
-} from "react-icons/fa"; // Import FaTimes icon
+import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes } from "react-icons/fa"; // Import FaTimes icon
 import "./Navbar.css";
 import CartDrawer from "./CartPage";
+import { CartContext } from './CartContext'; // Import CartContext
 import logo from "../pages/Images/logo1.png";
 
 const Navbar = () => {
@@ -17,6 +12,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
   const [isSearchOpen, setIsSearchOpen] = useState(false); // Search bar visibility
   const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
+  const { cartItems } = useContext(CartContext); // Access cartItems from CartContext
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
@@ -27,6 +23,10 @@ const Navbar = () => {
     { name: "Jasmine", link: "/product/23" },
     { name: "Rose", link: "/product/22" },
   ];
+
+  // Calculate total quantity of items in the cart
+  const totalCartQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   // Check if the user is logged in on component mount
   useEffect(() => {
     const token = localStorage.getItem("token"); // Replace with your token retrieval logic
@@ -74,6 +74,9 @@ const Navbar = () => {
         <div className="mcart">
           <Link onClick={toggleCart} id="cart">
             <FaShoppingCart size={20} />
+            {totalCartQuantity > 0 && (
+              <span className="cart-quantity">{totalCartQuantity}</span>
+            )}
           </Link>
           <Link onClick={toggleSearch} className="link">
             <FaSearch color="white" size={20} />
@@ -82,7 +85,7 @@ const Navbar = () => {
             <>
               <Link to={`/profile`}>
                 <FaUser color="white" size={20} />
-            </Link>
+              </Link>
             </>
           ) : (
             <Link className="link" to="/login">
@@ -109,6 +112,9 @@ const Navbar = () => {
             <li>
               <Link onClick={toggleCart} id="cart">
                 <FaShoppingCart size={20} />
+                {totalCartQuantity > 0 && (
+                  <span className="cart-quantity">{totalCartQuantity}</span>
+                )}
               </Link>
               <Link onClick={toggleSearch} className="link" id="search">
                 <FaSearch size={20} />
@@ -118,8 +124,8 @@ const Navbar = () => {
                 <>
                   {/* Display the user icon if logged in */}
                   <Link to={`/profile`}>
-                <FaUser color="white" size={20} />
-            </Link>
+                    <FaUser color="white" size={20} />
+                  </Link>
                   <button
                     id="logout"
                     className="loginbtn"

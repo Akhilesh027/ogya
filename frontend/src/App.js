@@ -20,6 +20,7 @@ import ConfirmationPage from './pages/orderConform';
 import OfferDetails from './pages/OfferShow';
 import ComboOffers from './pages/ComboOffers';
 import SearchPage from './pages/search';
+import './App.css'
 const App = () => {
     return (
         <Router>
@@ -43,9 +44,7 @@ const App = () => {
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/product/:id" element={<Productshow />} />
             </Routes>
-            <Footer/>
         </Router>
     );
 }
-
 export default App;

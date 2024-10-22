@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './ContactPage.css';
+import Footer from './footer';
 
 const ContactPage = () => {
   
@@ -52,7 +53,9 @@ const ContactPage = () => {
           <p><i className="fas fa-envelope"></i> ogya034@gmail.com</p>
         </div>
       </div>
+      <Footer/>
     </div>
+
   );
 };
 

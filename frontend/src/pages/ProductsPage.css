@@ -92,7 +92,7 @@
     }
     .product-card-home img{
         width: 100%;
-        height: 200px;
+        height: 175px;
     }
     .product-details-home {
         position: static; /* Make details always visible */

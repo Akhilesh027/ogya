@@ -5,6 +5,7 @@ import './Productshow.css';
 import { CartContext } from './CartContext';
 import Products from './product';
 import LoadingSpinner from './LoadingSpinner.jsx'; // Assuming you have a spinner component
+import Footer from './footer.jsx';
 
 const Productshow = () => {
   const [product, setProduct] = useState(null);
@@ -14,7 +15,7 @@ const Productshow = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(6); // Set initial quantity to 6 as per requirement
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
@@ -45,9 +46,12 @@ const Productshow = () => {
     fetchOtherProducts();
   }, [id]);
 
-  const handleQuantityChange = (e) => {
-    const value = Math.max(1, Number(e.target.value)); // Ensure minimum quantity of 1
-    setQuantity(value);
+  const handleQuantityChange = (operation) => {
+    if (operation === 'increment') {
+      setQuantity(quantity + 1);
+    } else if (operation === 'decrement' && quantity > 6) { // Ensure minimum quantity is 6
+      setQuantity(quantity - 1);
+    }
   };
 
   const handleAddToCart = () => {
@@ -106,14 +110,12 @@ const Productshow = () => {
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
           <div className="product-actions">
-            <label htmlFor="quantity">Quantity: <span>Min quantity of prodect is 6 items</span></label>
-            <input
-              type="number"
-              id="quantity"
-              value={quantity}
-              min="1"
-              onChange={handleQuantityChange}
-            />
+            <label htmlFor="quantity">Quantity: <span>Min quantity is 6 items</span></label>
+            <div className="quantity-control">
+              <button className="btn-quantity" onClick={() => handleQuantityChange('decrement')}>-</button>
+              <span className="quantity-display">{quantity}</span>
+              <button className="btn-quantity" onClick={() => handleQuantityChange('increment')}>+</button>
+            </div>
             <button className="btn" onClick={handleAddToCart}>Add to Cart</button>
             <button className="btn" onClick={handleBuyNow}>Buy Now</button>
           </div>
@@ -124,6 +126,7 @@ const Productshow = () => {
       {/* <div className="other-products-section">
         <Products products={otherProducts} />
       </div> */}
+       <Footer/>
     </>
   );
 };

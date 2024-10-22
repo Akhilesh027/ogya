@@ -9,6 +9,7 @@ import image1 from "./Images/2.jpg";
 import ComboOffers from "./ComboOffers";
 import chat from './Images/chat.svg';
 import sale from './Images/Sale.png';
+import Footer from "./footer"
 
 const HomePage = () => {
   const [showCombo, setShowCombo] = useState(false); // State to control combo offer visibility
@@ -28,17 +29,14 @@ const HomePage = () => {
       <section className="offers">
         <div className="scrolling-container">
           <div className="scrolling-text">
-            Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
-            &nbsp; &nbsp; Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
-            &nbsp; &nbsp; Special Offer Navaratri Exclusive - Shop Now & Save Big This Festive Season!
+            Special Offer  Exclusive - Shop Now & Save Big This Festive Season!
+            &nbsp; &nbsp; Special Offer  Exclusive - Shop Now & Save Big This Festive Season!
+            &nbsp; &nbsp; Special Offer  Exclusive - Shop Now & Save Big This Festive Season!
           </div>
         </div>
       </section>
 
       <section className="offerposter">
-   <Link to='/combo'>
-   <img src={sale} className='poster' alt="Special Sale Promotion" />
-   </Link>
         <ComboOffers/>
       </section>
 
@@ -48,7 +46,6 @@ const HomePage = () => {
 
       <section className="why-choose-us">
         <h1>Why Choose Ogya Agarbathi?</h1>
-        <p>Your trusted source for natural and authentic incense sticks.</p>
 
         <div className="content-section">
           <div className="text-content">
@@ -96,7 +93,7 @@ const HomePage = () => {
           <img src={chat} alt="Chat with us on WhatsApp" />
         </a>
       </div>
-
+      <Footer/>
     </div>
   );
 };

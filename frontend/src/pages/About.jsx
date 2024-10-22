@@ -2,6 +2,7 @@ import React from "react";
 import "./About.css"; // Import the CSS file for styling
 import aboutImg from './Images/rose.png'
 import img from './Images/mogra.png'
+import Footer from "./footer";
 const About = () => {
   return (
     <>
@@ -99,8 +100,9 @@ const About = () => {
         </p>
       </div>
     </div>
-  
+   
   </div>
+  <Footer/>
   </>
   );
 };

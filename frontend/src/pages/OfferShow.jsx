@@ -5,6 +5,7 @@ import './Productshow.css';
 import { CartContext } from './CartContext';
 import Products from './product';
 import LoadingSpinner from './LoadingSpinner.jsx'; // Assuming you have a spinner component
+import Footer from './footer.jsx';
 
 const Productshow = () => {
   const [product, setProduct] = useState(null);
@@ -45,9 +46,12 @@ const Productshow = () => {
     fetchOtherProducts();
   }, [id]);
 
-  const handleQuantityChange = (e) => {
-    const value = Math.max(1, Number(e.target.value)); // Ensure minimum quantity of 1
-    setQuantity(value);
+  const handleQuantityChange = (operation) => {
+    if (operation === 'increment') {
+      setQuantity(quantity + 1);
+    } else if (operation === 'decrement' && quantity > 1) {
+      setQuantity(quantity - 1);
+    }
   };
 
   const handleAddToCart = () => {
@@ -77,7 +81,7 @@ const Productshow = () => {
         <div className="product-images">
           <div className="main-image">
             <img
-              src={`https://ogya.onrender.com/uploads/${product.images}`}     
+              src={`https://ogya.onrender.com/uploads/${images[activeThumbnail]}`}     
               alt={`${product.name} - Main`}
             />
           </div>
@@ -95,23 +99,30 @@ const Productshow = () => {
         </div>
         <div className="description">
           <h2>{product.name}</h2>
+          {product.id === 10 && (
+            <p className='diff'>Fragrance Pack: 6 Combo 2+2+2 Lavender, Rose, Jasmine.</p>
+          )}
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
+          {product.id === 9 && (
+            <p>Order Now and bring home the fragrance of tranquility.</p>
+          )}
+          {product.id === 11 && (
+            <p>Order Now and embrace the purity of Tulasi Chandan, Guggal and Mogra.</p>
+          )}
           <div className="product-actions">
             <label htmlFor="quantity">Quantity:</label>
-            <input
-              type="number"
-              id="quantity"
-              value={quantity}
-              min="1"
-              onChange={handleQuantityChange}
-            />
+            <div className="quantity-control">
+              <button className="btn-quantity" onClick={() => handleQuantityChange('decrement')}>-</button>
+              <span className="quantity-display">{quantity}</span>
+              <button className="btn-quantity" onClick={() => handleQuantityChange('increment')}>+</button>
+            </div>
             <button className="btn" onClick={handleAddToCart}>Add to Cart</button>
             <button className="btn" onClick={handleBuyNow}>Buy Now</button>
           </div>
         </div>
       </section>
-
+      <Footer/>
       {/* Uncomment if you want to display other products */}
       {/* <div className="other-products-section">
         <Products products={otherProducts} />

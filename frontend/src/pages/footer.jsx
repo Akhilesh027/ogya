@@ -33,23 +33,13 @@ const Footer = () => {
         <div className="footer-section products">
           <h4>Products</h4>
           <ul>
-            <li><Link to={`/product/${product.id}`}>Lavender</Link></li>
-            <li><Link to={`/product/9`}>Jasmine</Link></li>
-            <li><Link to={`/product/10`}>Rose</Link></li>
-            <li><Link to={`/product/11`}>Mogra</Link></li>
+            <li><Link to={`/product/21`}>Lavender</Link></li>
+            <li><Link to={`/product/23`}>Jasmine</Link></li>
+            <li><Link to={`/product/22`}>Rose</Link></li>
+            <li><Link to={`/product/24`}>Mogra</Link></li>
           </ul>
         </div>
-        <div className="footer-section important-links">
-          <h4>Important Links</h4>
-          <ul>
-            <li><a href="/">FAQ's</a></li>
-            <li><a href="/">Get in Touch</a></li>
-            <li><a href="/">Privacy Policy</a></li>
-            <li><a href="/">Terms & Conditions</a></li>
-            <li><a href="/">Terms of Service</a></li>
-            <li><a href="/">Refund policy</a></li>
-          </ul>
-        </div>
+        
         <div className="footer-section follow-us">
           <h4>Follow Us</h4>
           <p>Get Our Latest Blogs & Updates</p>

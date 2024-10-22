@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import img from './Images/icon.png'
 import "./ProductsPage.css"; // Import the CSS file
+import Footer from "./footer";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -64,6 +66,7 @@ const Products = () => {
           </div>
         ))}
       </div>
+      <Footer/>
     </section>
   );
 };
