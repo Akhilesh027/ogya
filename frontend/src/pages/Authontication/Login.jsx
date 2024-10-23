@@ -6,7 +6,7 @@ import './styles.css'; // Import CSS file
 import loginimg from '../Images/about.jpg';
 
 const LoginPage = () => { 
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ const LoginPage = () => {
         // Store token and userId in localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
-        window.location.href = '/'
+        window.location.href = '/';
     } catch (error) {
         console.error('Login error:', error);
+        setError('Invalid email or password');
     }
-};
-
+  };
 
   return (
     <div className="login">
@@ -42,9 +42,9 @@ const LoginPage = () => {
       <div>
         <form onSubmit={handleSubmit}>
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
+            type="email"
+            name="email"
+            placeholder="Email"
             onChange={handleChange}
             required
           />

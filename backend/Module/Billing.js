@@ -2,76 +2,62 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../Database/db');
 
 const BillingDetails = sequelize.define('BillingDetails', {
-  id: {
+  userId: {  // Add userId field
     type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  firstName: {
+    allowNull: false,
+},
+firstName: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  lastName: {
+},
+lastName: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  companyName: {
+},
+country: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+streetAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+townCity: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+state: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+pinCode: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+paymentMethod: {
+    type: DataTypes.STRING,
+    allowNull: false,
+},
+transactionId: {
     type: DataTypes.STRING,
     allowNull: true,
-  },
-  country: {
+},
+paymentStatus: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  streetAddress: {
-    type: DataTypes.STRING,
+},
+amount: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-  },
-  townCity: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  state: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  pinCode: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  phone: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  paymentMethod: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  transactionId: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  paymentStatus: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'pending',
-  },
-  amount: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    defaultValue: Sequelize.NOW,
-  },
+},
 });
 
 module.exports = BillingDetails;

@@ -94,7 +94,7 @@
   color: #fff;
   cursor: pointer;
   transition: color 0.3s ease-in-out;
-  margin: 10px;
+  margin: 2px;
   list-style: none;
 }
 .navLinks svg {
@@ -175,6 +175,7 @@
 #search{
   color: #ccc;
 }
+
 /* Media query for responsive design */
 @media (max-width: 768px) {
   .hamburger {
@@ -242,7 +243,7 @@
     position: absolute;
     right: 0;
     order: 3;
-    padding-right: 10px;
+    padding-right: 5px;
   }
 
   .hamburger {
@@ -266,9 +267,9 @@
     order: 3;
   }
   .navbar .logo img {
-    width: 180px;
+    width: 160px;
     height: 20vh;
-    left: 26%;
+    left: 25%;
     margin-top: -2.4vh;
   }
   Link{
@@ -323,10 +324,16 @@
     color: #000;
   }
   .loginbtn{
-    position: absolute;
+    position: relative;
     padding: 7px 7px;
-    top: 29%;
-    left: -16%;
+    top: 3%;
     font-size: 16px;
+    left: -55px;
+  }
+  .mbtn{
+    position: relative;
+    padding: 7px 7px;
+    top: 3%;
+    font-size: 14px;
   }
 }

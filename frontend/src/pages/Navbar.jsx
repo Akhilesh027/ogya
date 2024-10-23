@@ -71,6 +71,8 @@ const Navbar = () => {
             <img src={logo} alt="logo" />
           </Link>
         </div>
+        
+        {/* Desktop cart, search and login/logout buttons */}
         <div className="mcart">
           <Link onClick={toggleCart} id="cart">
             <FaShoppingCart size={20} />
@@ -82,17 +84,16 @@ const Navbar = () => {
             <FaSearch color="white" size={20} />
           </Link>
           {isLoggedIn ? (
-            <>
-              <Link to={`/profile`}>
-                <FaUser color="white" size={20} />
-              </Link>
-            </>
+            <Link to={`/profile`}>
+              <FaUser color="white" size={20} />
+            </Link>
           ) : (
             <Link className="link" to="/login">
-              <button className="loginbtn">Login</button>
+              <button className="mbtn">Login</button>
             </Link>
           )}
         </div>
+
         <div className={`links ${isMenuOpen ? "active" : ""}`}>
           <Link to="/" className="link" onClick={closeMenu}>
             Home
@@ -107,6 +108,7 @@ const Navbar = () => {
             Contact
           </Link>
         </div>
+
         <div>
           <ul className={`navLinks ${isMenuOpen ? "active" : ""}`}>
             <li>
@@ -122,7 +124,6 @@ const Navbar = () => {
 
               {isLoggedIn ? (
                 <>
-                  {/* Display the user icon if logged in */}
                   <Link to={`/profile`}>
                     <FaUser color="white" size={20} />
                   </Link>
@@ -135,12 +136,9 @@ const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  {/* Display login button if not logged in */}
-                  <Link className="link" id="login" to="/login">
-                    <button className="loginbtn">Login</button>
-                  </Link>
-                </>
+                <Link className="link" id="login" to="/login">
+                  <button className="loginbtn">Login</button>
+                </Link>
               )}
             </li>
           </ul>

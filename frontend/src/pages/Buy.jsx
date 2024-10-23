@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./buy.css";
-import cardimg from "../pages/Images/card.png";
-import razorpayimg from "../pages/Images/pg.jpg";
 import cod from "../pages/Images/cod.webp";
+import razorpayimg from "../pages/Images/pg.jpg";
 import Footer from "./footer";
 
 const Buy = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    country: "",
+    fullname: "",
     streetAddress: "",
     townCity: "",
     state: "",
@@ -36,16 +33,7 @@ const Buy = () => {
   useEffect(() => {
     // Apply delivery charge if totalAmount is less than 500
     setDeliveryCharge(totalAmount < 500 ? 50 : 0);
-    // Load Razorpay script
-    loadRazorpayScript();
   }, [totalAmount]);
-
-  const loadRazorpayScript = () => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => console.log("Razorpay script loaded");
-    document.body.appendChild(script);
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,30 +56,21 @@ const Buy = () => {
     }
 
     setLoading(true);
-// } else if (paymentMethod === "cod") {
-    //   const paymentDetails = {
-    //     orderId: generateRandomOrderId(), // Unique order ID for COD
-    //     paymentMethod: "Cash on Delivery",
-    //     paymentStatus: "Confirmed", // Set to confirmed for COD
-    //     transactionId: null, // No transaction ID for COD
-    //     amount: totalAmount + deliveryCharge, // Correct calculation
-    //   };
-    if (paymentMethod === "razorpay") {
-        await handleRazorpayPayment();
-    } else if (paymentMethod === "cod") {
-        // Block COD submission
-        const paymentDetails = {
-              orderId: generateRandomOrderId(), // Unique order ID for COD
-              paymentMethod: "Cash on Delivery",
-              paymentStatus: "Confirmed", // Set to confirmed for COD
-              transactionId: null, // No transaction ID for COD
-              amount: totalAmount + deliveryCharge, // Correct calculation
-           };
-        return; // Prevent further execution
-    }
-    
-  };
 
+    if (paymentMethod === "razorpay") {
+      await handleRazorpayPayment();
+    } else if (paymentMethod === "cod") {
+      const paymentDetails = {
+        orderId: generateRandomOrderId(), // Unique order ID for COD
+        paymentMethod: "Cash on Delivery",
+        paymentStatus: "Confirmed", // Set to confirmed for COD
+        transactionId: null, // No transaction ID for COD
+        amount: totalAmount + deliveryCharge, // Correct calculatio
+      };
+      await submitOrder(paymentDetails);
+      // alert("cash on delivery is not available!");
+    }
+  };
   const handleRazorpayPayment = async () => {
     try {
       // Create an order on the backend
@@ -124,6 +103,7 @@ const Buy = () => {
               }
             );
 
+            // Check if payment verification was successful
             if (verificationResponse.status === 200) {
               // After successful payment, submit the order
               const paymentDetails = {
@@ -136,9 +116,9 @@ const Buy = () => {
 
               // Submit order to API
               await submitOrder(paymentDetails); // Submit order with payment details
-              alert("Payment successful!");
+              alert("Payment successful! Your order has been placed.");
             } else {
-              alert("Payment verification failed.");
+              alert("Payment verification failed. Please contact support.");
             }
           } catch (error) {
             console.error("Error during payment verification:", error);
@@ -146,18 +126,23 @@ const Buy = () => {
           }
         },
         prefill: {
-          name: `${formData.firstName} ${formData.lastName}`,
+          name: `${formData.fullname}`, // Use template literals for full name
           email: formData.email,
           contact: formData.phone,
         },
+        theme: {
+          color: "#F37254", // Customize your theme color
+        },
       };
 
+      // Create a new instance of Razorpay and open the payment modal
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
       console.error("Error during payment process:", error);
-      alert("Payment failed. Please try again.");
-      setLoading(false); // Hide loading spinner on error
+      alert("Payment initiation failed. Please try again.");
+    } finally {
+      setLoading(false); // Hide loading spinner on any error or after payment process
     }
   };
 
@@ -165,7 +150,7 @@ const Buy = () => {
     try {
       const orderData = {
         ...formData,
-        userId: userId || formData.userId, // Include userId in the order submission, fallback to formData.userId
+        userId: userId || formData.userId,
         paymentMethod: paymentDetails.paymentMethod,
         transactionId: paymentDetails.transactionId,
         paymentStatus: paymentDetails.paymentStatus,
@@ -183,125 +168,122 @@ const Buy = () => {
       }
     } catch (error) {
       console.error("Error recording order details:", error);
-      alert("Failed to record order details. Please try again."); // Inform the user
-      setLoading(false); // Hide loading spinner on error
+      alert("Failed to record order details. Please try again.");
+      setLoading(false);
     }
   };
 
   return (
     <>
-    <form onSubmit={handlePayment} className="billing-form">
+      <form onSubmit={handlePayment} className="billing-form">
         {loading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner">...</div>
-        </div>
-      )}
-      {/* Loading Spinner */}
-      <div className="billing-data">
-        <div className="billing-details">
-          <h2>Billing details</h2>
-          <label>First name *</label>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-          <label>Last name *</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          <label>Country / Region *</label>
-          <input
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-          />
-          <label>Street address *</label>
-          <input
-            type="text"
-            name="streetAddress"
-            value={formData.streetAddress}
-            onChange={handleChange}
-            required
-          />
-          <label>Town / City *</label>
-          <input
-            type="text"
-            name="townCity"
-            value={formData.townCity}
-            onChange={handleChange}
-            required
-          />
-          <label>State *</label>
-          <input
-            type="text"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          />
-          <label>PIN Code *</label>
-          <input
-            type="text"
-            name="pinCode"
-            value={formData.pinCode}
-            onChange={handleChange}
-            required
-          />
-          <label>Phone *</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-          />
-          <label>Email address *</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div className="loading-overlay">
+            <div className="loading-spinner">...</div>
+          </div>
+        )}
+        <div className="billing-data">
+          <div className="billing-details">
+            <h2>Billing details</h2>
+            <label>Full Name *</label>
+            <input
+              type="text"
+              name="fullname"
+              value={formData.fullname}
+              onChange={handleChange}
+              required
+              placeholder="Enter your full name"
+            />
 
-        <div className="order-details">
-          <h2>Your order</h2>
-          {cartItems.length === 0 ? (
-            <p>No items in the cart.</p>
-          ) : (
-            <div className="order-summary">
-              {cartItems.map((item) => (
-                <div key={item.id} className="order-item">
-                  <div>
-                    {item.name} × {item.quantity}
+            <label>Street Address *</label>
+            <input
+              type="text"
+              name="streetAddress"
+              value={formData.streetAddress}
+              onChange={handleChange}
+              required
+              placeholder="Enter your street address"
+            />
+
+            <label>Town / City *</label>
+            <input
+              type="text"
+              name="townCity"
+              value={formData.townCity}
+              onChange={handleChange}
+              required
+              placeholder="Enter your town or city"
+            />
+
+            <label>State *</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+              placeholder="Enter your state"
+            />
+
+            <label>PIN Code *</label>
+            <input
+              type="text"
+              name="pinCode"
+              value={formData.pinCode}
+              onChange={handleChange}
+              required
+              placeholder="Enter your PIN code"
+            />
+
+            <label>Phone *</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              placeholder="Enter your phone number"
+            />
+
+            <label>Email Address *</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Enter your email address"
+            />
+          </div>
+
+          <div className="order-details">
+            <h2>Your order</h2>
+            {cartItems.length === 0 ? (
+              <p>No items in the cart.</p>
+            ) : (
+              <div className="order-summary">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="order-item">
+                    <div>
+                      {item.name} × {item.quantity}
+                    </div>
+                    <div>₹{item.price * item.quantity}</div>
                   </div>
-                  <div>₹{item.price * item.quantity}</div>
+                ))}
+                <div className="order-shipping">
+                  <div>Shipping</div>
+                  <div>
+                    {deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}
+                  </div>
                 </div>
-              ))}
-              <div className="order-shipping">
-                <div>Shipping</div>
-                <div>{deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}</div>
+                <div className="order-total">
+                  <div>Total</div>
+                  <div>₹{totalAmount + deliveryCharge}</div>
+                </div>
               </div>
-              <div className="order-total">
-                <div>Total</div>
-                <div>₹{totalAmount + deliveryCharge}</div>
-              </div>
-            </div>
-          )}
-          <div className="payment-method">
-            <h2>Payment Method</h2>
-            <div className="payment-option">
-             
+            )}
+            <div className="payment-method">
+              <h2>Payment Method</h2>
+              <div className="payment-option">
                 <input
                   type="radio"
                   id="cod"
@@ -309,40 +291,39 @@ const Buy = () => {
                   value="cod"
                   checked={paymentMethod === "cod"}
                   onChange={handlePaymentMethodChange}
-                  disabled // Disable the COD option
+                  disabled
                 />
                 <label htmlFor="cod">
-                  <img src={cod} alt="COD" /> Cash on Delivery (Not available)
+                  <img src={cod} alt="COD" /> Cash on Delivery (not available)
                 </label>
               </div>
 
-            <div className="payment-option">
-              <input
-                type="radio"
-                id="razorpay"
-                name="paymentMethod"
-                value="razorpay"
-                checked={paymentMethod === "razorpay"}
-                onChange={handlePaymentMethodChange}
-              />
-              <label htmlFor="razorpay">
-                <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
-              </label>
-            </div>
+              <div className="payment-option">
+                <input
+                  type="radio"
+                  id="razorpay"
+                  name="paymentMethod"
+                  value="razorpay"
+                  checked={paymentMethod === "razorpay"}
+                  onChange={handlePaymentMethodChange}
+                />
+                <label htmlFor="razorpay">
+                  <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
+                </label>
+              </div>
 
-            <button
-              type="submit"
-              className="place-order-button"
-              disabled={loading}
-            >
-              {loading ? "Placing order..." : "Place Order"}
-            </button>
+              <button
+                type="submit"
+                className="place-order-button"
+                disabled={loading}
+              >
+                {loading ? "Placing order..." : "Place Order"}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-
-    </form>
-    <Footer/>
+      </form>
+      <Footer />
     </>
   );
 };

@@ -2,19 +2,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../Database/db');
 
 const Order = sequelize.define('Order', {
-    userId: {  // Add userId field
+    userId: {  
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    country: {
+    fullname:{
         type: DataTypes.STRING,
         allowNull: false,
     },

@@ -101,8 +101,9 @@ const sendEmail = async (to, subject, text) => {
 const JWT_SECRET = process.env.JWT_SECRET || 'BANNU9';
 
 // Registration route
+// Register route
 app.post('/register', async (req, res) => {
-  const { firstName, lastName, mobileNo, email, password, username } = req.body;
+  const { firstName, lastName, mobileNo, email, password } = req.body;
 
   try {
     // Hash password
@@ -114,39 +115,38 @@ app.post('/register', async (req, res) => {
       lastName,
       mobileNo,
       email,
-      password: hashedPassword,
-      username
+      password: hashedPassword
     });
 
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(400).json({ error: 'Registration failed' });
+    res.status(400).json({ error: 'Registration failed. Please try again.' });
   }
 });
 
 // Login route
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ error: 'Invalid username or password' });
+      return res.status(400).json({ error: 'Invalid email or password' }); // Updated for clarity
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid username or password' });
+      return res.status(400).json({ error: 'Invalid email or password' }); // Updated for clarity
     }
 
     // Generate JWT token
     const token = jwt.sign({ userId: user.userId }, 'bannu9', { expiresIn: '1h' });
 
-    res.json({ token, username: user.username, userId: user.userId });
+    res.json({ token, email: user.email, userId: user.userId });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({ error: 'Login failed. Please try again.' });
   }
 });
 
@@ -175,20 +175,17 @@ app.get('/profile', verifyToken, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Destructure user fields
+    const { userId: id, email, firstName, lastName, mobileNo } = user;
+
     // Respond with user details
-    res.json({
-      id: user.userId,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      mobileNo: user.mobileNo,
-    });
+    return res.status(200).json({ id, email, firstName, lastName, mobileNo });
   } catch (error) {
     console.error('Error fetching user details:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // Route to handle product creation with image upload
 app.post('/api/products', upload.array('images', 10), async (req, res) => {
@@ -422,13 +419,11 @@ const razorpayInstance = new Razorpay({
 // Create a new order
 app.post('/api/order', async (req, res) => {
   try {
-      const { userId, firstName, lastName, country, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount } = req.body;
+      const { userId,fullname, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount } = req.body;
 
       const newOrder = await Order.create({
-          userId,  // Save userId with the order
-          firstName,
-          lastName,
-          country,
+          userId,
+          fullname,
           streetAddress,
           townCity,
           state,

@@ -19,6 +19,7 @@ const ConfirmationPage = () => {
     }
 
     return (
+        <>
         <div className={`confirmation-page ${animationStarted ? 'fade-in' : ''}`}>
             {/* Animated "Order Confirmed" */}
             <div className={`confirmation-animation ${animationStarted ? 'slide-in' : ''}`}>
@@ -39,8 +40,10 @@ const ConfirmationPage = () => {
             <div className="back-to-home">
                 <Link to="/" className="back-home-btn">Back to Home</Link>
             </div>
-            <Footer/>
+            
         </div>
+        
+        <Footer/></>
     );
 };
 

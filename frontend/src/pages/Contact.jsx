@@ -28,6 +28,7 @@ const ContactPage = () => {
   };
 
   return (
+    <>
     <div className="contact-container">
       <h1 className="contact-title" >Contact Us</h1>
       <div className="contact-info">
@@ -53,9 +54,10 @@ const ContactPage = () => {
           <p><i className="fas fa-envelope"></i> ogya034@gmail.com</p>
         </div>
       </div>
-      <Footer/>
+      
     </div>
-
+    <Footer/>
+</>
   );
 };
 

@@ -78,25 +78,26 @@ const Productshow = () => {
   return (
     <>
       <section className="product-detail">
-        <div className="product-images">
-          <div className="main-image">
-            <img
-              src={`https://ogya.onrender.com/uploads/${images[activeThumbnail]}`}     
-              alt={`${product.name} - Main`}
-            />
-          </div>
-          <div className="thumbnail-images">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={`https://ogya.onrender.com/uploads/${image}`}
-                alt={`${product.name} - Thumbnail ${index + 1}`}
-                className={activeThumbnail === index ? 'active-thumbnail' : ''}
-                onClick={() => setActiveThumbnail(index)}
-              />
-            ))}
-          </div>
-        </div>
+      <div className="product-images">
+  <div className="main-image">
+    <img
+      src={`https://ogya.onrender.com/uploads/${product.images}`}     
+      alt={`${product.name} - Main`}
+    />
+  </div>
+  <div className="thumbnail-images">
+    {images.map((image, index) => (
+      <img
+        key={index}
+        src={`https://ogya.onrender.com/uploads/${image}`}
+        alt={`${product.name} - Thumbnail ${index + 1}`}
+        className={activeThumbnail === index ? 'active-thumbnail' : ''}
+        onClick={() => setActiveThumbnail(index)}
+      />
+    ))}
+  </div>
+</div>
+
         <div className="description">
           <h2>{product.name}</h2>
           {product.id === 10 && (

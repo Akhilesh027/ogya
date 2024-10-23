@@ -66,7 +66,7 @@ const Products = () => {
           </div>
         ))}
       </div>
-      <Footer/>
+    
     </section>
   );
 };
