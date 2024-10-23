@@ -60,15 +60,15 @@ const Buy = () => {
     if (paymentMethod === "razorpay") {
       await handleRazorpayPayment();
     } else if (paymentMethod === "cod") {
-      const paymentDetails = {
-        orderId: generateRandomOrderId(), // Unique order ID for COD
-        paymentMethod: "Cash on Delivery",
-        paymentStatus: "Confirmed", // Set to confirmed for COD
-        transactionId: null, // No transaction ID for COD
-        amount: totalAmount + deliveryCharge, // Correct calculatio
-      };
-      await submitOrder(paymentDetails);
-      // alert("cash on delivery is not available!");
+      // const paymentDetails = {
+      //   orderId: generateRandomOrderId(), // Unique order ID for COD
+      //   paymentMethod: "Cash on Delivery",
+      //   paymentStatus: "Confirmed", // Set to confirmed for COD
+      //   transactionId: null, // No transaction ID for COD
+      //   amount: totalAmount + deliveryCharge, // Correct calculatio
+      // };
+      // await submitOrder(paymentDetails);
+       alert("cash on delivery is not available!");
     }
   };
   const handleRazorpayPayment = async () => {
