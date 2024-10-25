@@ -104,10 +104,10 @@ const Productshow = () => {
             <p className='diff'>Fragrance Pack: 6 Combo 2+2+2 Lavender, Rose, Jasmine.</p>
           )}
            {product.id === 9 && (
-            <p className='diff'>Mother pack : 6combo Mogra, Jasmine, Lavender, Tulasi Chandan, and Guggul.</p>
+            <p className='diff'>Mother pack : 6 combo Mogra, Jasmine, Lavender, Tulasi Chandan, and Guggul.</p>
           )}
           {product.id === 11 && (
-            <p className='diff'>Order Now and embrace the purity of Tulasi Chandan, Guggal and Mogra.</p>
+            <p className='diff'>organic pack: 3 comboo Tulasi Chandan, Guggal and Mogra.</p>
           )}
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
