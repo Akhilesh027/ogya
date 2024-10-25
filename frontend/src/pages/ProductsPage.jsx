@@ -4,7 +4,7 @@ import axios from "axios";
 import img from './Images/icon.png'
 import "./ProductsPage.css"; // Import the CSS file
 import Footer from "./footer";
-
+import icon from "./Images/icon.png"
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
@@ -35,7 +35,11 @@ const Products = () => {
 
   return (
     <section className="products-page-home">
+      <div className="head">
+      <img className="icon" src={icon} alt="icon" />
       <h2>Our Products</h2>
+      <img className="icon" src={icon} alt="icon" />
+     </div>
       {/* <p>
         Transform your space into a serene sanctuary with Ogya Agarbathi’s range
         of 100% natural incense sticks. Each stick is meticulously crafted using

@@ -176,153 +176,152 @@ const Buy = () => {
   return (
     <>
       <form onSubmit={handlePayment} className="billing-form">
-        {loading && (
-          <div className="loading-overlay">
-            <div className="loading-spinner">...</div>
-          </div>
-        )}
-        <div className="billing-data">
-          <div className="billing-details">
-            <h2>Billing details</h2>
-            <label>Full Name *</label>
-            <input
-              type="text"
-              name="fullname"
-              value={formData.fullname}
-              onChange={handleChange}
-              required
-              placeholder="Enter your full name"
-            />
+  {loading && (
+    <div className="loading-overlay">
+      <div className="loading-spinner">...</div>
+    </div>
+  )}
+  <div className="billing-data">
+    <div className="billing-details">
+      <h2>Billing details</h2>
+      <label>Full Name *</label>
+      <input
+        type="text"
+        name="fullname"
+        value={formData.fullname}
+        onChange={handleChange}
+        required
+        placeholder="John Doe"
+      />
 
-            <label>Street Address *</label>
-            <input
-              type="text"
-              name="streetAddress"
-              value={formData.streetAddress}
-              onChange={handleChange}
-              required
-              placeholder="Enter your street address"
-            />
+      <label>Street Address *</label>
+      <input
+        type="text"
+        name="streetAddress"
+        value={formData.streetAddress}
+        onChange={handleChange}
+        required
+        placeholder="123 Main St"
+      />
 
-            <label>Town / City *</label>
-            <input
-              type="text"
-              name="townCity"
-              value={formData.townCity}
-              onChange={handleChange}
-              required
-              placeholder="Enter your town or city"
-            />
+      <label>Town / City *</label>
+      <input
+        type="text"
+        name="townCity"
+        value={formData.townCity}
+        onChange={handleChange}
+        required
+        placeholder="City Name"
+      />
 
-            <label>State *</label>
-            <input
-              type="text"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
-              placeholder="Enter your state"
-            />
+      <label>State *</label>
+      <input
+        type="text"
+        name="state"
+        value={formData.state}
+        onChange={handleChange}
+        required
+        placeholder="State Name"
+      />
 
-            <label>PIN Code *</label>
-            <input
-              type="text"
-              name="pinCode"
-              value={formData.pinCode}
-              onChange={handleChange}
-              required
-              placeholder="Enter your PIN code"
-            />
+      <label>PIN Code *</label>
+      <input
+        type="text"
+        name="pinCode"
+        value={formData.pinCode}
+        onChange={handleChange}
+        required
+        placeholder="123456"
+      />
 
-            <label>Phone *</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              placeholder="Enter your phone number"
-            />
+      <label>Phone *</label>
+      <input
+        type="text"
+        name="phone"
+        value={formData.phone}
+        onChange={handleChange}
+        required
+        placeholder="+91 9876543210"
+      />
 
-            <label>Email Address *</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email address"
-            />
-          </div>
+      <label>Email Address *</label>
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        placeholder="example@email.com"
+      />
+    </div>
 
-          <div className="order-details">
-            <h2>Your order</h2>
-            {cartItems.length === 0 ? (
-              <p>No items in the cart.</p>
-            ) : (
-              <div className="order-summary">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="order-item">
-                    <div>
-                      {item.name} × {item.quantity}
-                    </div>
-                    <div>₹{item.price * item.quantity}</div>
-                  </div>
-                ))}
-                <div className="order-shipping">
-                  <div>Shipping</div>
-                  <div>
-                    {deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}
-                  </div>
-                </div>
-                <div className="order-total">
-                  <div>Total</div>
-                  <div>₹{totalAmount + deliveryCharge}</div>
-                </div>
+    <div className="order-details">
+      <h2>Your order</h2>
+      {cartItems.length === 0 ? (
+        <p>No items in the cart.</p>
+      ) : (
+        <div className="order-summary">
+          {cartItems.map((item) => (
+            <div key={item.id} className="order-item">
+              <div>
+                {item.name} × {item.quantity}
               </div>
-            )}
-            <div className="payment-method">
-              <h2>Payment Method</h2>
-              <div className="payment-option">
-                <input
-                  type="radio"
-                  id="cod"
-                  name="paymentMethod"
-                  value="cod"
-                  checked={paymentMethod === "cod"}
-                  onChange={handlePaymentMethodChange}
-                  disabled
-                />
-                <label htmlFor="cod">
-                  <img src={cod} alt="COD" /> Cash on Delivery (not available)
-                </label>
-              </div>
-
-              <div className="payment-option">
-                <input
-                  type="radio"
-                  id="razorpay"
-                  name="paymentMethod"
-                  value="razorpay"
-                  checked={paymentMethod === "razorpay"}
-                  onChange={handlePaymentMethodChange}
-                />
-                <label htmlFor="razorpay">
-                  <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="place-order-button"
-                disabled={loading}
-              >
-                {loading ? "Placing order..." : "Place Order"}
-              </button>
+              <div>₹{item.price * item.quantity}</div>
             </div>
+          ))}
+          <div className="order-shipping">
+            <div>Shipping</div>
+            <div>{deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}</div>
+          </div>
+          <div className="order-total">
+            <div>Total</div>
+            <div>₹{totalAmount + deliveryCharge}</div>
           </div>
         </div>
-      </form>
+      )}
+      <div className="payment-method">
+        <h2>Payment Method</h2>
+        <div className="payment-option">
+          <input
+            type="radio"
+            id="cod"
+            name="paymentMethod"
+            value="cod"
+            checked={paymentMethod === "cod"}
+            onChange={handlePaymentMethodChange}
+            disabled
+          />
+          <label htmlFor="cod">
+            <img src={cod} alt="COD" /> Cash on Delivery (not available)
+          </label>
+        </div>
+
+        <div className="payment-option">
+          <input
+            type="radio"
+            id="razorpay"
+            name="paymentMethod"
+            value="razorpay"
+            checked={paymentMethod === "razorpay"}
+            onChange={handlePaymentMethodChange}
+          />
+          <label htmlFor="razorpay">
+            <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          className="place-order-button"
+          disabled={loading}
+        >
+          {loading ? "Placing order..." : "Place Order"}
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
+
       <Footer />
     </>
   );

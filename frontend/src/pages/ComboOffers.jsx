@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './combo.css';
 import { Link } from 'react-router-dom';
-
+import icon from "./Images/icon.png"
 const ComboOffers = () => {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
@@ -30,7 +30,11 @@ const ComboOffers = () => {
   return (
     <>
       <div className="combooffer">
-        <h1>Comboo Offers</h1> 
+      <div className="head">
+      <img className="icon" src={icon} alt="icon" />
+      <h2>Comboo offers</h2>
+      <img className="icon" src={icon} alt="icon" />
+     </div>
         <div className="combo">
           {offers.map((offer) => (
             <div className="combo-item" key={offer.id}>

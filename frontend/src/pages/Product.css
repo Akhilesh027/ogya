@@ -6,7 +6,15 @@
   min-height: 100vh;
   font-family: Helvetica, Georgia;
 }
-
+.icon{
+  width: 100px;
+  height: 100px;
+}
+.head{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .products-page h2 {
   font-family: ui-sans-serif;
   text-align: center;

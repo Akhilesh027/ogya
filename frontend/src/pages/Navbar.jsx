@@ -76,9 +76,7 @@ const Navbar = () => {
         <div className="mcart">
           <Link onClick={toggleCart} id="cart">
             <FaShoppingCart size={20} />
-            {totalCartQuantity > 0 && (
-              <span className="cart-quantity">{totalCartQuantity}</span>
-            )}
+          
           </Link>
           <Link onClick={toggleSearch} className="link">
             <FaSearch color="white" size={20} />
@@ -114,9 +112,7 @@ const Navbar = () => {
             <li>
               <Link onClick={toggleCart} id="cart">
                 <FaShoppingCart size={20} />
-                {totalCartQuantity > 0 && (
-                  <span className="cart-quantity">{totalCartQuantity}</span>
-                )}
+            
               </Link>
               <Link onClick={toggleSearch} className="link" id="search">
                 <FaSearch size={20} />

@@ -164,7 +164,6 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// Route to get user details (profile) by userId from token
 app.get('/profile', verifyToken, async (req, res) => {
   try {
     const userId = req.userId; // Extracted from token
@@ -185,9 +184,6 @@ app.get('/profile', verifyToken, async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-// Route to handle product creation with image upload
 app.post('/api/products', upload.array('images', 10), async (req, res) => {
   const { name, price, description } = req.body;
   const images = req.files.map(file => `${file.filename}`);

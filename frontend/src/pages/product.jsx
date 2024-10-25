@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Product.css";
 import Footer from "./footer";
-
+import icon from "./Images/icon.png"
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
@@ -35,8 +35,11 @@ const Products = () => {
 
   return (
     <section className="products-page">
+     <div className="head">
+      <img className="icon" src={icon} alt="icon" />
       <h2>Our Products</h2>
-      
+      <img className="icon" src={icon} alt="icon" />
+     </div>
       <div className="products-container">
         {products.map((product) => (
           <div key={product.id} className="product-card">
