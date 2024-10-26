@@ -44,6 +44,46 @@
   .logout-button:hover {
     background-color: #0056b3; /* Darker background on hover */
   }
+  .profile-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #ffe6e6; /* light red background for error context */
+    border: 1px solid #ff4d4d; /* border matching error color */
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 40px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-error p[role="alert"] {
+    color: #ff4d4d; /* bold red color for alert text */
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .login-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff; /* primary blue color for login button */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #0056b3; /* darker blue on hover */
+  }
+  
+  .login-button:active {
+    background-color: #004085; /* even darker blue on active */
+  }
   
   /* Responsive design for smaller screens */
   @media (max-width: 600px) {

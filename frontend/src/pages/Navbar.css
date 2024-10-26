@@ -87,7 +87,19 @@
   align-items: center;
   list-style: none;
 }
-
+.cart-count {
+  position: absolute;
+  top: -15px;
+    right: -4px;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+.cartdiv{
+    position: absolute;
+    right: 0px;
+}
 /* Cart and search icons */
 #cart,
 .search {
@@ -241,9 +253,9 @@
   }
   .mcart {
     position: absolute;
-    right: 0;
+    right: 0px;
     order: 3;
-    padding-right: 5px;
+    padding-right: 8px;
   }
 
   .hamburger {
@@ -328,12 +340,25 @@
     padding: 7px 7px;
     top: 3%;
     font-size: 16px;
-    left: -55px;
+    left: -35px;
   }
   .mbtn{
-    position: relative;
+    position: absolute;
     padding: 7px 7px;
     top: 3%;
     font-size: 14px;
+  }
+  .cart-count {
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    color: white;
+    font-size: 14px;
+    border-radius: 50%;
+    padding: 2px 6px;
+  }
+  .cartdiv{
+      position: absolute;
+      right: 60px;
   }
 }

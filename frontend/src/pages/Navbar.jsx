@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes } from "react-icons/fa"; // Import FaTimes icon
+import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes } from "react-icons/fa"; 
 import "./Navbar.css";
 import CartDrawer from "./CartPage";
-import { CartContext } from './CartContext'; // Import CartContext
+import { CartContext } from './CartContext';
 import logo from "../pages/Images/logo1.png";
 
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Authentication state
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // Search bar visibility
-  const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
-  const { cartItems } = useContext(CartContext); // Access cartItems from CartContext
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const { cartItems } = useContext(CartContext);
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
-  // Search suggestions array
   const suggestions = [
     { name: "Mogra", link: "/product/24" },
     { name: "Lavender", link: "/product/21" },
@@ -24,12 +23,10 @@ const Navbar = () => {
     { name: "Rose", link: "/product/22" },
   ];
 
-  // Calculate total quantity of items in the cart
   const totalCartQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Check if the user is logged in on component mount
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Replace with your token retrieval logic
+    const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
 
@@ -42,22 +39,18 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Clear the token
-    setIsLoggedIn(false); // Update the state
-    navigate("/login"); // Redirect to the login page
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/login");
   };
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
-    if (!isSearchOpen) {
-      setSearchSuggestions(suggestions); // Display suggestions when search is opened
-    } else {
-      setSearchSuggestions([]); // Hide suggestions when search is closed
-    }
+    setSearchSuggestions(isSearchOpen ? [] : suggestions);
   };
 
   const closeMenu = () => {
-    setIsMenuOpen(false); // Close the menu when a link is clicked
+    setIsMenuOpen(false);
   };
 
   return (
@@ -72,24 +65,23 @@ const Navbar = () => {
           </Link>
         </div>
         
-        {/* Desktop cart, search and login/logout buttons */}
         <div className="mcart">
           <Link onClick={toggleCart} id="cart">
+            <div className="cartdiv">
             <FaShoppingCart size={20} />
-          
+            {totalCartQuantity > 0 && (
+              <span className="cart-count">{totalCartQuantity}</span>
+            )}
+            </div>
           </Link>
           <Link onClick={toggleSearch} className="link">
             <FaSearch color="white" size={20} />
           </Link>
-          {isLoggedIn ? (
+        
             <Link to={`/profile`}>
               <FaUser color="white" size={20} />
             </Link>
-          ) : (
-            <Link className="link" to="/login">
-              <button className="mbtn">Login</button>
-            </Link>
-          )}
+          
         </div>
 
         <div className={`links ${isMenuOpen ? "active" : ""}`}>
@@ -110,14 +102,17 @@ const Navbar = () => {
         <div>
           <ul className={`navLinks ${isMenuOpen ? "active" : ""}`}>
             <li>
-              <Link onClick={toggleCart} id="cart">
+              <Link onClick={toggleCart} className="link" id="cart">
+                <div className="cartdiv">
                 <FaShoppingCart size={20} />
-            
+                {totalCartQuantity > 0 && (
+                  <span className="cart-count">{totalCartQuantity}</span>
+                )}
+                </div>
               </Link>
               <Link onClick={toggleSearch} className="link" id="search">
                 <FaSearch size={20} />
               </Link>
-
               {isLoggedIn ? (
                 <>
                   <Link to={`/profile`}>

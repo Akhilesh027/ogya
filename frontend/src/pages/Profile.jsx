@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './profilo.css';
 import Footer from './footer';
@@ -7,21 +8,23 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Fetch user profile on component mount
   useEffect(() => {
     const fetchUserProfile = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
-        if (!token) {
-          setError('User is not authenticated');
-          setLoading(false);
-          return;
-        }
+      const token = localStorage.getItem('token');
+      
+      // Check if user is not authenticated
+      if (!token) {
+        setError('Please log in to view your profile.');
+        setLoading(false);
+        return;
+      }
 
+      try {
         const response = await axios.get('https://ogya.onrender.com/profile', {
           headers: {
-            Authorization: token // Pass token in Authorization header
+            Authorization: token
           }
         });
 
@@ -38,12 +41,9 @@ const ProfilePage = () => {
   }, []);
 
   const handleLogout = () => {
-    // Remove token and userId from local storage
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    
-    // Redirect to the login page
-    window.location.href = '/login'; // Change this to the route of your login page
+    navigate('/login'); // Redirect to login page
   };
 
   if (loading) {
@@ -51,7 +51,16 @@ const ProfilePage = () => {
   }
 
   if (error) {
-    return <p role="alert">{error}</p>;
+    return (
+      <div className="profile-error">
+        <p role="alert">{error}</p>
+        {!userData && (
+          <button onClick={() => navigate('/login')} className="login-button">
+            Login
+          </button>
+        )}
+      </div>
+    );
   }
 
   return (
