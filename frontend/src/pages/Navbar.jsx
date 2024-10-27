@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FaShoppingCart, FaBars, FaUser, FaSearch, FaTimes } from "react-icons/fa"; 
 import "./Navbar.css";
 import CartDrawer from "./CartPage";
@@ -15,6 +15,7 @@ const Navbar = () => {
   const { cartItems } = useContext(CartContext);
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const suggestions = [
     { name: "Mogra", link: "/product/24" },
@@ -52,9 +53,19 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  const handleProfileClick = () => {
+    if (location.pathname === "/profile") {
+      navigate(-1); // Go back to the previous page
+    } else {
+      navigate("/profile"); // Navigate to the profile page
+    }
+  };
+
   const handleLoginNavigation = () => {
     navigate("/login");
   };
+
   return (
     <>
       <nav id="navbar" className="navbar">
@@ -70,20 +81,16 @@ const Navbar = () => {
         <div className="mcart">
           <Link onClick={toggleCart} id="cart">
             <div className="cartdiv">
-            <FaShoppingCart size={20} />
-            {totalCartQuantity > 0 && (
-              <span className="cart-count">{totalCartQuantity}</span>
-            )}
+              <FaShoppingCart size={20} />
+              {totalCartQuantity > 0 && (
+                <span className="cart-count">{totalCartQuantity}</span>
+              )}
             </div>
           </Link>
           <Link onClick={toggleSearch} className="link">
             <FaSearch color="white" size={20} />
           </Link>
-        
-            <Link to={`/profile`}>
-              <FaUser color="white" size={20} />
-            </Link>
-          
+          <FaUser color="white" size={20} onClick={handleProfileClick} />
         </div>
 
         <div className={`links ${isMenuOpen ? "active" : ""}`}>
@@ -100,23 +107,18 @@ const Navbar = () => {
             Contact
           </Link>
           {isLoggedIn ? (
-                <>
-                  <Link className="plink" to={`/profile`}>
-                    <FaUser color="white" size={20} />
-                  </Link>
-                  <button
-                    id="logout"
-                    className="lloginbtn"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-              
-                  <button onClick={handleLoginNavigation} className="loginp">Login</button>
-               
-              )}
+            <>
+              <button
+                id="logout"
+                className="lloginbtn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button onClick={handleLoginNavigation} className="loginp">Login</button>
+          )}
         </div>
 
         <div>
@@ -124,28 +126,26 @@ const Navbar = () => {
             <li>
               <Link onClick={toggleCart} className="link" id="cart">
                 <div className="cartdiv">
-                <FaShoppingCart size={20} />
-                {totalCartQuantity > 0 && (
-                  <span className="cart-count">{totalCartQuantity}</span>
-                )}
+                  <FaShoppingCart size={20} />
+                  {totalCartQuantity > 0 && (
+                    <span className="cart-count">{totalCartQuantity}</span>
+                  )}
                 </div>
               </Link>
               <Link onClick={toggleSearch} className="link" id="search">
                 <FaSearch size={20} />
               </Link>
               {isLoggedIn ? (
-                <>
-                  <Link to={`/profile`}>
-                    <FaUser color="white" size={20} />
-                  </Link>
-                  <button
-                    id="logout"
-                    className="loginbtn"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </>
+                   <>
+                <FaUser color="white" size={20} onClick={handleProfileClick} />
+                <button
+                id="logout"
+                className="loginbtn"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+           </>
               ) : (
                 <Link className="link" id="login" to="/login">
                   <button className="loginbtn">Login</button>
