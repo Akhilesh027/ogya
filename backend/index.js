@@ -86,7 +86,7 @@ const sendEmail = async (to, subject, text) => {
     });
 
     let mailOptions = {
-      from: 'ogya034@gmail@gmail.com', // Replace with your email
+      from: 'ogya034@gmail.com', // Replace with your email
       to: to,
       subject: subject,
       text: text,
@@ -372,14 +372,14 @@ const sendAdminNotification = async (firstName, amount, transactionId) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'ogya034@gmail@gmail.com', // Replace with your email
+        user: 'ogya034@gmail.com', // Replace with your email
         pass: 'oxyl xyfs qako bldv', // Replace with your email password
       },
     });
 
     let mailOptions = {
-      from: 'ogya034@gmail@gmail.com', // Replace with your email
-      to: 'ogya034@gmail@gmail.com', // Replace with admin's email
+      from: 'ogya034@gmail.com', // Replace with your email
+      to: 'ogya034@gmail.com', // Replace with admin's email
       subject: 'New Payment Received',
       text: `A new payment has been received:
              Name: ${firstName}
@@ -608,7 +608,7 @@ Your Company Name
 Phone Number: [Your Contact Number]
 Email: [Your Company Email]`;
 
-      await sendEmail('ogya034@gmail@gmail.com', subject, text);
+      await sendEmail('ogya034@gmail.com', subject, text);
 
       res.json({ message: 'Order status updated successfully', order });
   } catch (error) {
@@ -647,7 +647,7 @@ app.post('/api/contact', async (req, res) => {
                   Email: ${email}
                   Phone Number: ${phonenumber}`;
     
-    await sendEmail('ogya034@gmail@gmail.com', subject, text);
+    await sendEmail('ogya034@gmail.com', subject, text);
 
     res.status(200).json({ message: 'Message sent successfully!' });
   } catch (error) {
