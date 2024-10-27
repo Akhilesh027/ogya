@@ -28,7 +28,7 @@ const Productshow = () => {
       } catch (error) {
         console.error('Error fetching product details:', error);
         setError('Failed to load product details. Please try again later.');
-        setLoading(false); // Stop loading
+        setLoading(false); 
       }
     };
 
@@ -41,7 +41,6 @@ const Productshow = () => {
         console.error('Error fetching other products:', error);
       }
     };
-
     fetchProduct();
     fetchOtherProducts();
   }, [id]);

@@ -116,6 +116,10 @@
 .search:hover {
   color: #f39c12;
 }
+.plink,.lloginbtn,.loginp{
+  display: none;
+}
+
 
 /* Search bar styling */
 .search-bar {
@@ -187,6 +191,11 @@
 #search{
   color: #ccc;
 }
+.cartdiv {
+  position: absolute;
+  top: -7px; /* Reset any top offsets */
+  transform: translateY(0); /* Ensure it's set at the initial Y-axis */
+}
 
 /* Media query for responsive design */
 @media (max-width: 768px) {
@@ -224,7 +233,14 @@
     right: 57px;
   }
 }
-
+@media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  .cartdiv {
+    position: absolute;
+    top: 0 !important;
+    transform: translateY(0) !important;
+    right: 60px;
+  }
+}
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -281,8 +297,8 @@
   .navbar .logo img {
     width: 160px;
     height: 20vh;
-    left: 25%;
-    margin-top: -2.4vh;
+    left: 30%;
+    margin-top: -2.8vh;
   }
   Link{
     color: #ccc;
@@ -314,7 +330,7 @@
     top: 30%;
   }
   .navLinks li {
-    display: flex;
+    display: none;
     align-items: center;
     top: 10vw;
     position: absolute;
@@ -357,8 +373,13 @@
     border-radius: 50%;
     padding: 2px 6px;
   }
-  .cartdiv{
-      position: absolute;
-      right: 60px;
+  .lloginbtn,.loginp{
+    display: block;
+  }
+  .lloginbtn,.loginp{
+    position: relative;
+    border: none;
+    background: white;
+    font-size: 16px;
   }
 }

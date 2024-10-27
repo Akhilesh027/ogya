@@ -52,7 +52,9 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-
+  const handleLoginNavigation = () => {
+    navigate("/login");
+  };
   return (
     <>
       <nav id="navbar" className="navbar">
@@ -97,6 +99,24 @@ const Navbar = () => {
           <Link to="/contact" className="link" onClick={closeMenu}>
             Contact
           </Link>
+          {isLoggedIn ? (
+                <>
+                  <Link className="plink" to={`/profile`}>
+                    <FaUser color="white" size={20} />
+                  </Link>
+                  <button
+                    id="logout"
+                    className="lloginbtn"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+              
+                  <button onClick={handleLoginNavigation} className="loginp">Login</button>
+               
+              )}
         </div>
 
         <div>
