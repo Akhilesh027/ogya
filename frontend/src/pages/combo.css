@@ -9,7 +9,9 @@
   gap: 20px;
   flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
 }
-
+.head h2{
+  font-size: 25px;
+}
 .combooffer h1 {
   margin: 30px;
 }
