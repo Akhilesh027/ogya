@@ -22,6 +22,7 @@ const crypto = require('crypto'); // Make sure to import crypto if you haven't a
 const Order = require('./Module/order');
 const Payment = require('./Module/order');
 const Post = require('./Module/post');
+const comboOffer = require('./Module/OfferCombo');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -90,6 +91,21 @@ app.post("/api/posts", upload.single("image"), async (req, res) => {
 
   try {
       const newPost = await Product.create({
+          name,
+          price,
+          description,
+          images: req.file ? `${req.file.filename}` : ""
+      });
+      res.json(newPost);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+app.post("/api/comboposts", upload.single("image"), async (req, res) => {
+  const { name, price, description } = req.body;
+
+  try {
+      const newPost = await comboOffer.create({
           name,
           price,
           description,
