@@ -21,6 +21,7 @@ const Razorpay = require('razorpay')
 const crypto = require('crypto'); // Make sure to import crypto if you haven't already
 const Order = require('./Module/order');
 const Payment = require('./Module/order');
+const Post = require('./Module/post');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -37,31 +38,16 @@ sequelize.sync()
   
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Serve static files from 'uploads' directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static("uploads"));
 
-// Configure Multer for file storage
+
+// Set up multer for image uploads
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'uploads'));
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
+  destination: "./uploads/",
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
-
 const upload = multer({ storage: storage });
 
-app.post('/upload', (req, res) => {
-  upload(req, res, function (err) {
-    if (err) {
-      console.error('Error during file upload:', err);
-      return res.status(500).send('Error uploading file.');
-    }
-    res.send('File uploaded successfully.');
-  });
-});
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -99,9 +85,22 @@ const sendEmail = async (to, subject, text) => {
   }
 };
 const JWT_SECRET = process.env.JWT_SECRET || 'BANNU9';
+app.post("/api/posts", upload.single("image"), async (req, res) => {
+  const { name, price, description } = req.body;
 
-// Registration route
-// Register route
+  try {
+      const newPost = await Product.create({
+          name,
+          price,
+          description,
+          images: req.file ? `${req.file.filename}` : ""
+      });
+      res.json(newPost);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 app.post('/register', async (req, res) => {
   const { firstName, lastName, mobileNo, email, password } = req.body;
 
@@ -286,7 +285,7 @@ app.get('/api/orders', async (req, res) => {
 // Route to get total orders
 app.get('/api/totalOrders', async (req, res) => {
   try {
-    const totalOrders = await BillingDetails.count();
+    const totalOrders = await Order.count();
     res.json({ totalOrders });
   } catch (error) {
     console.error('Error fetching total orders:', error);
@@ -297,7 +296,7 @@ app.get('/api/totalOrders', async (req, res) => {
 // Route to get total amount generated
 app.get('/api/totalAmount', async (req, res) => {
   try {
-    const totalAmount = await BillingDetails.sum('amount');
+    const totalAmount = await Order.sum('amount');
     res.json({ totalAmount });
   } catch (error) {
     console.error('Error fetching total amount:', error);
@@ -572,7 +571,7 @@ app.post('/api/payment/verify', async (req, res) => {
 
 app.get('/api/billing', async (req, res) => {
   try {
-    const billingDetails = await BillingDetails.findAll();
+    const billingDetails = await Order.findAll();
     res.status(200).json(billingDetails);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching billing details' });
@@ -583,7 +582,7 @@ app.put('/orders/:id/status', async (req, res) => {
   const { status } = req.body;
 
   try {
-      const order = await BillingDetails.findByPk(id);
+      const order = await Order.findByPk(id);
 
       if (!order) {
           return res.status(404).json({ message: 'Order not found' });
@@ -621,7 +620,7 @@ app.delete('/api/billing/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-      const order = await BillingDetails.findByPk(id);
+      const order = await Order.findByPk(id);
       if (!order) {
           return res.status(404).json({ message: 'Order not found' });
       }
