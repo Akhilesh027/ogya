@@ -16,6 +16,8 @@ const Buy = () => {
     phone: "",
     email: "",
     userId: "",
+    productId:"",
+    productName:""
   });
 
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -60,16 +62,21 @@ const Buy = () => {
     if (paymentMethod === "razorpay") {
       await handleRazorpayPayment();
     } else if (paymentMethod === "cod") {
-      // const paymentDetails = {
-      //   orderId: generateRandomOrderId(), // Unique order ID for COD
-      //   paymentMethod: "Cash on Delivery",
-      //   paymentStatus: "Confirmed", // Set to confirmed for COD
-      //   transactionId: null, // No transaction ID for COD
-      //   amount: totalAmount + deliveryCharge, // Correct calculatio
-      // };
-      // await submitOrder(paymentDetails);
-       alert("cash on delivery is not available!");
-    }
+    //  const paymentDetails = {
+    //    orderId: generateRandomOrderId(), // Unique order ID for COD
+    //    paymentMethod: "Cash on Delivery",
+    //    paymentStatus: "Confirmed", // Set to confirmed for COD
+    //    transactionId: null, // No transaction ID for COD
+    //    amount: totalAmount + deliveryCharge, 
+    //    products: cartItems.map(item => ({
+    //     productId: item.id,
+   // await submitOrder(paymentDetails);
+
+    //     productName: item.name,
+    // })),// Correct calculatio
+    //  };
+    alert("Cash on Delivery is not available");
+      }
   };
   const handleRazorpayPayment = async () => {
     try {
@@ -111,7 +118,11 @@ const Buy = () => {
                 paymentMethod: "Razorpay",
                 paymentStatus: "Completed", // Set status as completed
                 transactionId: response.razorpay_payment_id, // Store payment ID
-                amount: orderData.amount / 100, // Convert back to original amount
+                amount: orderData.amount / 100,
+                products: cartItems.map(item => ({
+                  productId: item.id,
+                  productName: item.name,
+              })), // Convert back to original amount
               };
 
               // Submit order to API
@@ -148,30 +159,35 @@ const Buy = () => {
 
   const submitOrder = async (paymentDetails) => {
     try {
-      const orderData = {
-        ...formData,
-        userId: userId || formData.userId,
-        paymentMethod: paymentDetails.paymentMethod,
-        transactionId: paymentDetails.transactionId,
-        paymentStatus: paymentDetails.paymentStatus,
-        amount: paymentDetails.amount,
-      };
+        const orderData = {
+            ...formData,
+            userId: userId || formData.userId,
+            paymentMethod: paymentDetails.paymentMethod,
+            transactionId: paymentDetails.transactionId,
+            paymentStatus: paymentDetails.paymentStatus,
+            amount: paymentDetails.amount,
+            products: cartItems.map(item => ({
+                productId: item.id,
+                productName: item.name,
+            })), // Include product ID and name
+        };
 
-      const response = await axios.post(
-        "https://ogya.onrender.com/api/order",
-        orderData
-      );
+        const response = await axios.post(
+            "https://ogya.onrender.com/api/order",
+            orderData
+        );
 
-      if (response.status === 201) {
-        setLoading(false);
-        navigate("/confirmation", { state: { orderDetails: response.data } });
-      }
+        if (response.status === 201) {
+            setLoading(false);
+            navigate("/confirmation", { state: { orderDetails: response.data } });
+        }
     } catch (error) {
-      console.error("Error recording order details:", error);
-      alert("Failed to record order details. Please try again.");
-      setLoading(false);
+        console.error("Error recording order details:", error);
+        alert("Failed to record order details. Please try again.");
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <>

@@ -430,7 +430,7 @@ const razorpayInstance = new Razorpay({
 // Create a new order
 app.post('/api/order', async (req, res) => {
   try {
-      const { userId,fullname, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount } = req.body;
+      const { userId, fullname, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount, productId, productName } = req.body;
 
       const newOrder = await Order.create({
           userId,
@@ -444,7 +444,9 @@ app.post('/api/order', async (req, res) => {
           paymentMethod,
           transactionId,
           paymentStatus,
-          amount
+          amount,
+          productId,
+          productName 
       });
       await sendAdminNotification(firstName, amount, transactionId || 'N/A');
 
@@ -454,6 +456,7 @@ app.post('/api/order', async (req, res) => {
       return res.status(500).json({ error: 'Error creating order' });
   }
 });
+
 
 // Create an order for Razorpay payment
 app.post('/api/create-order', async (req, res) => {

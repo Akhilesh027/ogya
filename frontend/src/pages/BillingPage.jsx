@@ -73,7 +73,7 @@ const Buy = () => {
 
     const handleRazorpayPayment = async () => {
         try {
-            const { data: orderData } = await axios.post('http://localhost:5000/api/create-order', {
+            const { data: orderData } = await axios.post('https://ogya.onrender.com/api/create-order', {
                 ...formData,
                 userId: userId,
                 amount: (totalAmount + deliveryCharge) * 100
@@ -88,7 +88,7 @@ const Buy = () => {
                 order_id: orderData.orderId,
                 handler: async (response) => {
                     try {
-                        const verificationResponse = await axios.post('http://localhost:5000/api/payment/verify', {
+                        const verificationResponse = await axios.post('https://ogya.onrender.com/api/payment/verify', {
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_signature: response.razorpay_signature,
@@ -139,7 +139,7 @@ const Buy = () => {
                 amount: paymentDetails.amount
             };
     
-            const response = await axios.post('http://localhost:5000/api/order', orderData);
+            const response = await axios.post('https://ogya.onrender.com/api/order', orderData);
     
             if (response.status === 201) {
                 setLoading(false);

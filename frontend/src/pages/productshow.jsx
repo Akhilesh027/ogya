@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Productshow.css';
 import { CartContext } from './CartContext';
-import Products from './product';
+import products from './productsdata.jsx'; // Import your local product data
 import LoadingSpinner from './LoadingSpinner.jsx'; // Assuming you have a spinner component
 import Footer from './footer.jsx';
 
 const Productshow = () => {
   const [product, setProduct] = useState(null);
   const [otherProducts, setOtherProducts] = useState([]);
-  const [activeThumbnail, setActiveThumbnail] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { id } = useParams();
@@ -19,31 +17,16 @@ const Productshow = () => {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true); // Start loading
-        const response = await axios.get(`https://ogya.onrender.com/api/products/${id}`);
-        setProduct(response.data);
-        setLoading(false); // Stop loading
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-        setError('Failed to load product details. Please try again later.');
-        setLoading(false); // Stop loading
-      }
-    };
+    const fetchedProduct = products.find((prod) => prod.id === parseInt(id)); // Find product by ID
 
-    const fetchOtherProducts = async () => {
-      try {
-        const response = await axios.get('https://ogya.onrender.com/api/products'); // Fetch all products
-        const filteredProducts = response.data.filter((item) => item._id !== id);
-        setOtherProducts(filteredProducts);
-      } catch (error) {
-        console.error('Error fetching other products:', error);
-      }
-    };
-
-    fetchProduct();
-    fetchOtherProducts();
+    if (fetchedProduct) {
+      setProduct(fetchedProduct);
+      setOtherProducts(products.filter((item) => item.id !== parseInt(id))); // Get other products excluding the current one
+      setLoading(false);
+    } else {
+      setError('Product not found.');
+      setLoading(false);
+    }
   }, [id]);
 
   const handleQuantityChange = (operation) => {
@@ -80,29 +63,15 @@ const Productshow = () => {
   if (loading) return <LoadingSpinner />; // Display a loading spinner while loading
   if (error) return <p>{error}</p>;
 
-  // Ensure product.images is an array before using .map
-  const images = Array.isArray(product.images) ? product.images : [];
-
   return (
     <>
       <section className="product-detail">
         <div className="product-images">
           <div className="main-image">
             <img
-              src={`https://ogya.onrender.com/uploads/${product.images}`}     
+              src={product.images} // Directly use the single image property
               alt={`${product.name} - Main`}
             />
-          </div>
-          <div className="thumbnail-images">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={`https://ogya.onrender.com/uploads/${image}`}
-                alt={`${product.name} - Thumbnail ${index + 1}`}
-                className={activeThumbnail === index ? 'active-thumbnail' : ''}
-                onClick={() => setActiveThumbnail(index)}
-              />
-            ))}
           </div>
         </div>
         <div className="description">
@@ -126,7 +95,7 @@ const Productshow = () => {
       {/* <div className="other-products-section">
         <Products products={otherProducts} />
       </div> */}
-       <Footer/>
+      <Footer />
     </>
   );
 };

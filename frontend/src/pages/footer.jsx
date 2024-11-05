@@ -33,10 +33,10 @@ const Footer = () => {
         <div className="footer-section products">
           <h4>Products</h4>
           <ul>
-            <li><Link to={`/product/21`}>Lavender</Link></li>
-            <li><Link to={`/product/23`}>Jasmine</Link></li>
-            <li><Link to={`/product/22`}>Rose</Link></li>
-            <li><Link to={`/product/24`}>Mogra</Link></li>
+            <li><Link to={`/product/4`}>Lavender</Link></li>
+            <li><Link to={`/product/6`}>Jasmine</Link></li>
+            <li><Link to={`/product/5`}>Rose</Link></li>
+            <li><Link to={`/product/7`}>Mogra</Link></li>
           </ul>
         </div>
         

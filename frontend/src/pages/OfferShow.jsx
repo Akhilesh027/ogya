@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './Productshow.css';
 import { CartContext } from './CartContext';
-import Products from './product';
+import products from './comboproducts.jsx'; // Import the static product data
 import LoadingSpinner from './LoadingSpinner.jsx'; // Assuming you have a spinner component
 import Footer from './footer.jsx';
 
@@ -19,30 +18,17 @@ const Productshow = () => {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true); // Start loading
-        const response = await axios.get(`https://ogya.onrender.com/api/offers/${id}`);
-        setProduct(response.data);
-        setLoading(false); // Stop loading
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-        setError('Failed to load product details. Please try again later.');
-        setLoading(false); 
-      }
-    };
-
-    const fetchOtherProducts = async () => {
-      try {
-        const response = await axios.get('https://ogya.onrender.com/api/offer'); // Fetch all products
-        const filteredProducts = response.data.filter((item) => item._id !== id);
-        setOtherProducts(filteredProducts);
-      } catch (error) {
-        console.error('Error fetching other products:', error);
-      }
-    };
-    fetchProduct();
-    fetchOtherProducts();
+    const selectedProduct = products.find((prod) => prod.id === parseInt(id)); // Find product by ID
+    if (selectedProduct) {
+      setProduct(selectedProduct);
+      setLoading(false);
+    } else {
+      setError('Product not found');
+      setLoading(false);
+    }
+    // You can set otherProducts here if desired
+    const filteredProducts = products.filter((item) => item.id !== parseInt(id));
+    setOtherProducts(filteredProducts);
   }, [id]);
 
   const handleQuantityChange = (operation) => {
@@ -77,36 +63,26 @@ const Productshow = () => {
   return (
     <>
       <section className="product-detail">
-      <div className="product-images">
-  <div className="main-image">
-    <img
-      src={`https://ogya.onrender.com/uploads/${product.images}`}     
-      alt={`${product.name} - Main`}
-    />
-  </div>
-  <div className="thumbnail-images">
-    {images.map((image, index) => (
-      <img
-        key={index}
-        src={`https://ogya.onrender.com/uploads/${image}`}
-        alt={`${product.name} - Thumbnail ${index + 1}`}
-        className={activeThumbnail === index ? 'active-thumbnail' : ''}
-        onClick={() => setActiveThumbnail(index)}
-      />
-    ))}
-  </div>
-</div>
+        <div className="product-images">
+          <div className="main-image">
+            <img
+              src={product.images}     
+              alt={`${product.name} - Main`}
+            />
+          </div>
+          
+        </div>
 
         <div className="description">
           <h2>{product.name}</h2>
-          {product.id === 10 && (
+          {product.id === 2 && (
             <p className='diff'>Fragrance Pack: 6 Combo 2+2+2 Lavender, Rose, Jasmine.</p>
           )}
-           {product.id === 9 && (
+          {product.id === 1 && (
             <p className='diff'>Mother pack : 6 combo Mogra, Jasmine, Lavender, Tulasi Chandan, and Guggul.</p>
           )}
-          {product.id === 11 && (
-            <p className='diff'>organic pack: 3 comboo Tulasi Chandan, Guggal and Mogra.</p>
+          {product.id === 3 && (
+            <p className='diff'>Organic pack: 3 combo Tulasi Chandan, Guggal and Mogra.</p>
           )}
           <p>Price: ₹{product.price}</p>
           <p>{product.description}</p>
@@ -128,7 +104,7 @@ const Productshow = () => {
           </div>
         </div>
       </section>
-      <Footer/>
+      <Footer />
       {/* Uncomment if you want to display other products */}
       {/* <div className="other-products-section">
         <Products products={otherProducts} />

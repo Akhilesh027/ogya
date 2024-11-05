@@ -1,56 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// src/ComboOffers.js
+import React, { useState, useEffect } from 'react';
 import './combo.css';
 import { Link } from 'react-router-dom';
-import icon from "./Images/icon.png"
+import icon from "./Images/icon.png";
+import comboProducts from "./comboproducts"; // Static offers
+import axios from 'axios'; // Import axios for API requests
+
 const ComboOffers = () => {
-  const [offers, setOffers] = useState([]);
+  const [offers] = useState(comboProducts); // Use imported product data
+  const [backendOffers, setBackendOffers] = useState([]); // State for backend products
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  useEffect(() => {
-    // Fetch combo offers from backend API
-    const fetchOffers = async () => {
-      try {
-        const response = await axios.get('https://ogya.onrender.com/api/offer');
-        setOffers(response.data);
-      } catch (error) {
-        console.error('Error fetching combo offers:', error);
-      } finally {
-        setLoading(false); // Set loading to false after data is fetched
-      }
-    };
+  // Fetch backend combo offers
+  // useEffect(() => {
+  //   const fetchBackendOffers = async () => {
+  //     try {
+  //       const response = await axios.get('https://ogya.onrender.com/api/offer'); // Adjust the API endpoint as needed
+  //       setBackendOffers(response.data); // Set fetched offers
+  //       setLoading(false); // Stop loading
+  //     } catch (error) {
+  //       console.error('Error fetching backend offers:', error);
+  //       setError('Failed to load offers.'); // Set error message
+  //       setLoading(false); // Stop loading
+  //     }
+  //   };
 
-    fetchOffers();
-  }, []); 
-  
-  if (loading) {
-    return <div className="loading">Loading offers...</div>; // Loading message or spinner
-  }
+  //   fetchBackendOffers();
+  // }, []);
+
+  // if (loading) return <p>Loading offers...</p>; // Show loading message
+  // if (error) return <p>{error}</p>; // Show error message
 
   return (
-    <>
-      <div className="combooffer">
+    <div className="combooffer">
       <div className="head">
-      <img className="icon" src={icon} alt="icon" />
-      <h2>Comboo offers</h2>
-      <img className="icon" src={icon} alt="icon" />
-     </div>
-        <div className="combo">
-          {offers.map((offer) => (
-            <div className="combo-item" key={offer.id}>
-              <img src={`https://ogya.onrender.com/uploads/${offer.images}`} alt={offer.name} /> {/* Update the path based on your server configuration */}
-              <div className="combo-info">
-                <h2>{offer.name}</h2>
-                <p>Price: ₹{offer.price}</p>
-                <Link to={`/offer/${offer.id}`}> 
-                  <button className="view-btn">View</button>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+        <img className="icon" src={icon} alt="combo offers icon" />
+        <h2>Combo Offers</h2>
+        <img className="icon" src={icon} alt="combo offers icon" />
       </div>
-    </>
+      
+      {/* Static Combo Offers Section */}
+      <div className="combo">
+        {offers.map((offer) => (
+          <div className="combo-item" key={offer.id}>
+            <img 
+              src={offer.images} // Ensure this is an array or adjust according to your data structure
+              alt={offer.name} 
+              className="offer-image" 
+            />
+            <div className="combo-info">
+              <h2>{offer.name}</h2>
+              <p>Price: ₹{offer.price}</p>
+              <Link to={`/offer/${offer.id}`}>
+                <button className="view-btn" aria-label={`View details of ${offer.name}`}>View</button>
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
   );
 };
 

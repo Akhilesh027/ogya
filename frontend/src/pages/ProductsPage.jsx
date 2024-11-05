@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import img from './Images/icon.png'
+import products from './productsdata'; // Import your product data
 import "./ProductsPage.css"; // Import the CSS file
 import Footer from "./footer";
-import icon from "./Images/icon.png"
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
+import icon from "./Images/icon.png";
 
+const Products = () => {
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  // Simulate fetching data by using a timeout
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = () => {
+      setLoading(true); // Start loading state
       try {
-        const response = await axios.get("https://ogya.onrender.com/api/products");
-        // Ensure that imageUrl is handled correctly, assuming it's a single URL for simplicity
-        const fetchedProducts = response.data.map((product) => ({
-          ...product,
-          imageUrl: Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : '', // Handle images as array
-        }));
-        setProducts(fetchedProducts);
+        // Simulating a fetch operation
+        if (products.length === 0) {
+          throw new Error("No products found.");
+        }
+        setLoading(false); // End loading state
       } catch (error) {
         console.error("Error fetching products:", error);
-      }finally{
-        setLoading(false);
+        setError("Failed to load products. Please try again later."); // Set error message
       }
     };
 
@@ -33,27 +32,24 @@ const Products = () => {
     return <div className="loading">Loading products...</div>; // Loading message or spinner
   }
 
+  if (error) {
+    return <div className="error-message">{error}</div>; // Display error message
+  }
+
   return (
     <section className="products-page-home">
       <div className="head">
-      <img className="icon" src={icon} alt="icon" />
-      <h2>Our Products</h2>
-      <img className="icon" src={icon} alt="icon" />
-     </div>
-      {/* <p>
-        Transform your space into a serene sanctuary with Ogya Agarbathi’s range
-        of 100% natural incense sticks. Each stick is meticulously crafted using
-        the finest ingredients, sourced sustainably to ensure purity and
-        authenticity. Our incense sticks are free from harmful chemicals and
-        synthetic additives, offering a clean, soothing burn that enhances your
-        well-being.
-      </p> */}
+        <img className="icon" src={icon} alt="icon" />
+        <h2>Our Products</h2>
+        <img className="icon" src={icon} alt="icon" />
+      </div>
+
       <div className="products-container-home">
         {products.map((product) => (
           <div key={product.id} className="product-card-home">
             <div className="product-image-home">
               <img
-                src={`https://ogya.onrender.com/uploads/${product.images}`} // Updated to handle URL construction
+                src={product.images} // Use the image directly from product data
                 alt={product.name}
               />
               <div className="product-details-home">
@@ -70,7 +66,6 @@ const Products = () => {
           </div>
         ))}
       </div>
-    
     </section>
   );
 };

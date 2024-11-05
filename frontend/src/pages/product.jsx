@@ -1,51 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import "./Product.css";
+import products from './productsdata'; // Import your product data
+import "./Product.css"; // Ensure your CSS file is correctly linked
 import Footer from "./footer";
-import icon from "./Images/icon.png"
+import icon from "./Images/icon.png";
+
 const Products = () => {
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    // Simulating fetch with local data
+    const fetchProducts = () => {
+      setLoading(true); // Start loading state
       try {
-        const response = await axios.get("https://ogya.onrender.com/api/products");
-        const fetchedProducts = response.data.map((product) => {
-          // Clean and extract the image filename from the array
-          const imageUrl = Array.isArray(product.images) && product.images.length > 0 
-            ? product.images[0].replace(/[\[\]"]/g, '') // Remove any brackets and quotes if present
-            : ''; 
-          return { ...product, imageUrl };
-        });
-        setProducts(fetchedProducts);
+        if (products.length === 0) {
+          throw new Error("No products found.");
+        }
+        setLoading(false); // End loading state
       } catch (error) {
         console.error("Error fetching products:", error);
-      }finally{
-        setLoading(false);
+        setError("Failed to load products. Please try again later."); // Set error message
       }
     };
 
     fetchProducts();
   }, []); // Empty dependency array means this effect runs once on mount
+
   if (loading) {
     return <div className="loading">Loading products...</div>; // Loading message or spinner
   }
 
+  if (error) {
+    return <div className="error-message">{error}</div>; // Display error message
+  }
+
   return (
     <section className="products-page">
-     <div className="head">
-      <img className="icon" src={icon} alt="icon" />
-      <h2>Our Products</h2>
-      <img className="icon" src={icon} alt="icon" />
-     </div>
+      <div className="head">
+        <img className="icon" src={icon} alt="icon" />
+        <h2>Our Products</h2>
+        <img className="icon" src={icon} alt="icon" />
+      </div>
       <div className="products-container">
         {products.map((product) => (
           <div key={product.id} className="product-card">
             <div className="product-image">
               <img
-                src={`https://ogya.onrender.com/uploads/${product.images}`} // Updated to handle URL construction
+                src={product.images} // Use the image directly from product data
                 alt={product.name}
               />
               <div className="product-details">
@@ -62,9 +64,8 @@ const Products = () => {
           </div>
         ))}
       </div>
-      <Footer/>
+      <Footer />
     </section>
-     
   );
 };
 

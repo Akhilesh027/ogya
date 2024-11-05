@@ -21,7 +21,7 @@ const SearchResults = () => {
       try {
         setLoading(true);
 
-        const response = await axios.get(`http://localhost:5000/api/products?query=${searchTerm}`);
+        const response = await axios.get(`https://ogya.onrender.com/api/products?query=${searchTerm}`);
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
