@@ -62,20 +62,16 @@ const Buy = () => {
     if (paymentMethod === "razorpay") {
       await handleRazorpayPayment();
     } else if (paymentMethod === "cod") {
-    //  const paymentDetails = {
-    //    orderId: generateRandomOrderId(), // Unique order ID for COD
-    //    paymentMethod: "Cash on Delivery",
-    //    paymentStatus: "Confirmed", // Set to confirmed for COD
-    //    transactionId: null, // No transaction ID for COD
-    //    amount: totalAmount + deliveryCharge, 
-    //    products: cartItems.map(item => ({
-    //     productId: item.id,
-   // await submitOrder(paymentDetails);
-
-    //     productName: item.name,
-    // })),// Correct calculatio
-    //  };
-    alert("Cash on Delivery is not available");
+   const paymentDetails = {
+     orderId: generateRandomOrderId(), // Unique order ID for COD
+     paymentMethod: "Cash on Delivery",
+     paymentStatus: "Confirmed", // Set to confirmed for COD
+     transactionId: null, // No transaction ID for COD
+     amount: totalAmount + deliveryCharge, 
+     // Correct calculatio
+   };
+   await submitOrder(paymentDetails);
+    //alert("Cash on Delivery is not available");
       }
   };
   const handleRazorpayPayment = async () => {
@@ -159,18 +155,18 @@ const Buy = () => {
 
   const submitOrder = async (paymentDetails) => {
     try {
-        const orderData = {
-            ...formData,
-            userId: userId || formData.userId,
-            paymentMethod: paymentDetails.paymentMethod,
-            transactionId: paymentDetails.transactionId,
-            paymentStatus: paymentDetails.paymentStatus,
-            amount: paymentDetails.amount,
-            products: cartItems.map(item => ({
-                productId: item.id,
-                productName: item.name,
-            })), // Include product ID and name
-        };
+      const orderData = {
+        ...formData,
+        userId: userId || formData.userId,
+        paymentMethod: paymentDetails.paymentMethod,
+        transactionId: paymentDetails.transactionId,
+        paymentStatus: paymentDetails.paymentStatus,
+        amount: paymentDetails.amount,
+        products: cartItems.map(item => ({
+          productId: item.productId,
+          productName: item.productName,
+        })),
+      };      
 
         const response = await axios.post(
             "https://ogya.onrender.com/api/order",

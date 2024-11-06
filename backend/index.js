@@ -430,8 +430,23 @@ const razorpayInstance = new Razorpay({
 // Create a new order
 app.post('/api/order', async (req, res) => {
   try {
-      const { userId, fullname, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount, productId, productName } = req.body;
+      const {
+          userId,
+          fullname,
+          streetAddress,
+          townCity,
+          state,
+          pinCode,
+          phone,
+          email,
+          paymentMethod,
+          transactionId,
+          paymentStatus,
+          amount,
+          products // Expect an array of product objects: [{ productId, productName }]
+      } = req.body;
 
+      // Create the new order, including an array of products
       const newOrder = await Order.create({
           userId,
           fullname,
@@ -445,10 +460,10 @@ app.post('/api/order', async (req, res) => {
           transactionId,
           paymentStatus,
           amount,
-          productId,
-          productName 
+          products // This should be structured to match the schema's array of objects
       });
-      await sendAdminNotification(firstName, amount, transactionId || 'N/A');
+
+      await sendAdminNotification(fullname, amount, transactionId || 'N/A');
 
       return res.status(201).json(newOrder);
   } catch (error) {
