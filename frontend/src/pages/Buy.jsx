@@ -16,8 +16,6 @@ const Buy = () => {
     phone: "",
     email: "",
     userId: "",
-    productId:"",
-    productName:""
   });
 
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -62,21 +60,17 @@ const Buy = () => {
     if (paymentMethod === "razorpay") {
       await handleRazorpayPayment();
     } else if (paymentMethod === "cod") {
-    //  const paymentDetails = {
-    //    orderId: generateRandomOrderId(), // Unique order ID for COD
-    //    paymentMethod: "Cash on Delivery",
-    //    paymentStatus: "Confirmed", // Set to confirmed for COD
-    //    transactionId: null, // No transaction ID for COD
-    //    amount: totalAmount + deliveryCharge, 
-    //    products: cartItems.map(item => ({
-    //     productId: item.id,
-   // await submitOrder(paymentDetails);
-
-    //     productName: item.name,
-    // })),// Correct calculatio
-    //  };
-    alert("Cash on Delivery is not available");
-      }
+      //const paymentDetails = {
+      //  orderId: generateRandomOrderId(), // Unique order ID for COD
+      //  paymentMethod: "Cash on Delivery",
+      //  paymentStatus: "Confirmed", // Set to confirmed for COD
+      //  transactionId: null, // No transaction ID for COD
+      //  amount: totalAmount + deliveryCharge,
+      //  products: cartItems, // Pass the cart items for COD
+      //};
+      //await submitOrder(paymentDetails);
+      alert("cash on delivery is not available");
+    }
   };
   const handleRazorpayPayment = async () => {
     try {
@@ -86,7 +80,9 @@ const Buy = () => {
         {
           ...formData,
           userId: userId, // Include userId in the order creation
-          amount: (totalAmount + deliveryCharge) * 100, // Convert to paise for Razorpay
+          amount: (totalAmount + deliveryCharge) * 100, 
+          products: cartItems, // Include cart items in order creation
+          // Convert to paise for Razorpay
         }
       );
 
@@ -119,10 +115,9 @@ const Buy = () => {
                 paymentStatus: "Completed", // Set status as completed
                 transactionId: response.razorpay_payment_id, // Store payment ID
                 amount: orderData.amount / 100,
-                products: cartItems.map(item => ({
-                  productId: item.id,
-                  productName: item.name,
-              })), // Convert back to original amount
+                products: cartItems, // Pass the cart items for Razorpay payment
+
+               // Convert back to original amount
               };
 
               // Submit order to API
@@ -159,184 +154,182 @@ const Buy = () => {
 
   const submitOrder = async (paymentDetails) => {
     try {
-        const orderData = {
-            ...formData,
-            userId: userId || formData.userId,
-            paymentMethod: paymentDetails.paymentMethod,
-            transactionId: paymentDetails.transactionId,
-            paymentStatus: paymentDetails.paymentStatus,
-            amount: paymentDetails.amount,
-            products: cartItems.map(item => ({
-                productId: item.id,
-                productName: item.name,
-            })), // Include product ID and name
-        };
+      const orderData = {
+        ...formData,
+        userId: userId || formData.userId,
+        paymentMethod: paymentDetails.paymentMethod,
+        transactionId: paymentDetails.transactionId,
+        paymentStatus: paymentDetails.paymentStatus,
+        amount: paymentDetails.amount,
+        products: paymentDetails.products, // Pass the products to the order submission
+      };
 
-        const response = await axios.post(
-            "https://ogya.onrender.com/api/order",
-            orderData
-        );
+      const response = await axios.post(
+        "https://ogya.onrender.com/order",
+        orderData
+      );
 
-        if (response.status === 201) {
-            setLoading(false);
-            navigate("/confirmation", { state: { orderDetails: response.data } });
-        }
-    } catch (error) {
-        console.error("Error recording order details:", error);
-        alert("Failed to record order details. Please try again.");
+      if (response.status === 201) {
         setLoading(false);
+        navigate("/confirmation", { state: { orderDetails: response.data } });
+      }
+    } catch (error) {
+      console.error("Error recording order details:", error);
+      alert("Failed to record order details. Please try again.");
+      setLoading(false);
     }
-};
-
+  };
 
   return (
     <>
       <form onSubmit={handlePayment} className="billing-form">
-  {loading && (
-    <div className="loading-overlay">
-      <div className="loading-spinner">...</div>
-    </div>
-  )}
-  <div className="billing-data">
-    <div className="billing-details">
-      <h2>Billing details</h2>
-      <label>Full Name *</label>
-      <input
-        type="text"
-        name="fullname"
-        value={formData.fullname}
-        onChange={handleChange}
-        required
-        placeholder="John Doe"
-      />
+        {loading && (
+          <div className="loading-overlay">
+            <div className="loading-spinner">...</div>
+          </div>
+        )}
+        <div className="billing-data">
+          <div className="billing-details">
+            <h2>Billing details</h2>
+            <label>Full Name *</label>
+            <input
+              type="text"
+              name="fullname"
+              value={formData.fullname}
+              onChange={handleChange}
+              required
+              placeholder="John Doe"
+            />
 
-      <label>Street Address *</label>
-      <input
-        type="text"
-        name="streetAddress"
-        value={formData.streetAddress}
-        onChange={handleChange}
-        required
-        placeholder="123 Main St"
-      />
+            <label>Street Address *</label>
+            <input
+              type="text"
+              name="streetAddress"
+              value={formData.streetAddress}
+              onChange={handleChange}
+              required
+              placeholder="123 Main St"
+            />
 
-      <label>Town / City *</label>
-      <input
-        type="text"
-        name="townCity"
-        value={formData.townCity}
-        onChange={handleChange}
-        required
-        placeholder="City Name"
-      />
+            <label>Town / City *</label>
+            <input
+              type="text"
+              name="townCity"
+              value={formData.townCity}
+              onChange={handleChange}
+              required
+              placeholder="City Name"
+            />
 
-      <label>State *</label>
-      <input
-        type="text"
-        name="state"
-        value={formData.state}
-        onChange={handleChange}
-        required
-        placeholder="State Name"
-      />
+            <label>State *</label>
+            <input
+              type="text"
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+              placeholder="State Name"
+            />
 
-      <label>PIN Code *</label>
-      <input
-        type="text"
-        name="pinCode"
-        value={formData.pinCode}
-        onChange={handleChange}
-        required
-        placeholder="123456"
-      />
+            <label>PIN Code *</label>
+            <input
+              type="text"
+              name="pinCode"
+              value={formData.pinCode}
+              onChange={handleChange}
+              required
+              placeholder="123456"
+            />
 
-      <label>Phone *</label>
-      <input
-        type="text"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        required
-        placeholder="+91 9876543210"
-      />
+            <label>Phone *</label>
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              placeholder="+91 9876543210"
+            />
 
-      <label>Email Address *</label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-        placeholder="example@email.com"
-      />
-    </div>
+            <label>Email Address *</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="example@email.com"
+            />
+          </div>
 
-    <div className="order-details">
-      <h2>Your order</h2>
-      {cartItems.length === 0 ? (
-        <p>No items in the cart.</p>
-      ) : (
-        <div className="order-summary">
-          {cartItems.map((item) => (
-            <div key={item.id} className="order-item">
-              <div>
-                {item.name} × {item.quantity}
+          <div className="order-details">
+            <h2>Your order</h2>
+            {cartItems.length === 0 ? (
+              <p>No items in the cart.</p>
+            ) : (
+              <div className="order-summary">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="order-item">
+                    <div>
+                      {item.name} × {item.quantity}
+                    </div>
+                    <div>₹{item.price * item.quantity}</div>
+                  </div>
+                ))}
+                <div className="order-shipping">
+                  <div>Shipping</div>
+                  <div>
+                    {deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}
+                  </div>
+                </div>
+                <div className="order-total">
+                  <div>Total</div>
+                  <div>₹{totalAmount + deliveryCharge}</div>
+                </div>
               </div>
-              <div>₹{item.price * item.quantity}</div>
+            )}
+            <div className="payment-method">
+              <h2>Payment Method</h2>
+              <div className="payment-option">
+                <input
+                  type="radio"
+                  id="cod"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={paymentMethod === "cod"}
+                  onChange={handlePaymentMethodChange}
+                  disabled
+                />
+                <label htmlFor="cod">
+                  <img src={cod} alt="COD" /> Cash on Delivery (not available)
+                </label>
+              </div>
+
+              <div className="payment-option">
+                <input
+                  type="radio"
+                  id="razorpay"
+                  name="paymentMethod"
+                  value="razorpay"
+                  checked={paymentMethod === "razorpay"}
+                  onChange={handlePaymentMethodChange}
+                />
+                <label htmlFor="razorpay">
+                  <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="place-order-button"
+                disabled={loading}
+              >
+                {loading ? "Placing order..." : "Place Order"}
+              </button>
             </div>
-          ))}
-          <div className="order-shipping">
-            <div>Shipping</div>
-            <div>{deliveryCharge > 0 ? "₹" + deliveryCharge : "Free"}</div>
-          </div>
-          <div className="order-total">
-            <div>Total</div>
-            <div>₹{totalAmount + deliveryCharge}</div>
           </div>
         </div>
-      )}
-      <div className="payment-method">
-        <h2>Payment Method</h2>
-        <div className="payment-option">
-          <input
-            type="radio"
-            id="cod"
-            name="paymentMethod"
-            value="cod"
-            checked={paymentMethod === "cod"}
-            onChange={handlePaymentMethodChange}
-            disabled
-          />
-          <label htmlFor="cod">
-            <img src={cod} alt="COD" /> Cash on Delivery (not available)
-          </label>
-        </div>
-
-        <div className="payment-option">
-          <input
-            type="radio"
-            id="razorpay"
-            name="paymentMethod"
-            value="razorpay"
-            checked={paymentMethod === "razorpay"}
-            onChange={handlePaymentMethodChange}
-          />
-          <label htmlFor="razorpay">
-            <img src={razorpayimg} alt="Razorpay" /> Pay with Razorpay
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          className="place-order-button"
-          disabled={loading}
-        >
-          {loading ? "Placing order..." : "Place Order"}
-        </button>
-      </div>
-    </div>
-  </div>
-</form>
+      </form>
 
       <Footer />
     </>

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../Database/db');
+const sequelize = require('./Database/db');
 
-const Order = sequelize.define('Order', {
+const billingOrder = sequelize.define('billingOrder', {
     userId: {  
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -50,10 +50,10 @@ const Order = sequelize.define('Order', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    products: {  // Added column to store products
-        type: DataTypes.JSONB,  // Storing products as a JSON object
+    products: {  
+        type: DataTypes.JSON,  
         allowNull: false,
     },
 });
 
-module.exports = Order;
+module.exports = billingOrder;

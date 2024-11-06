@@ -23,6 +23,8 @@ const Order = require('./Module/order');
 const Payment = require('./Module/order');
 const Post = require('./Module/post');
 const comboOffer = require('./Module/OfferCombo');
+const billing = require('./Module/Billing');
+const BillingOrder = require('./BillingOrder');
 
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -282,7 +284,7 @@ app.delete('/remove/:productId', async (req, res) => {
 
 app.post('/api/order', async (req, res) => {
   try {
-    const order = await Order.create(req.body);
+    const order = await BillingOrder.create(req.body);
     res.status(201).json(order);
   } catch (error) {
     res.status(500).json({ error: 'Failed to save order information' });
@@ -291,7 +293,7 @@ app.post('/api/order', async (req, res) => {
 
 app.get('/api/orders', async (req, res) => {
   try {
-    const orders = await Order.findAll(); 
+    const orders = await BillingOrder.findAll(); 
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching orders', error });
@@ -301,7 +303,7 @@ app.get('/api/orders', async (req, res) => {
 // Route to get total orders
 app.get('/api/totalOrders', async (req, res) => {
   try {
-    const totalOrders = await Order.count();
+    const totalOrders = await BillingOrder.count();
     res.json({ totalOrders });
   } catch (error) {
     console.error('Error fetching total orders:', error);
@@ -312,7 +314,7 @@ app.get('/api/totalOrders', async (req, res) => {
 // Route to get total amount generated
 app.get('/api/totalAmount', async (req, res) => {
   try {
-    const totalAmount = await Order.sum('amount');
+    const totalAmount = await BillingOrder.sum('amount');
     res.json({ totalAmount });
   } catch (error) {
     console.error('Error fetching total amount:', error);
@@ -382,22 +384,22 @@ app.get('/api/cart', async (req, res) => {
   }
 });
 
-const sendAdminNotification = async (firstName, amount, transactionId) => {
+const sendAdminNotification = async (fullname, amount, transactionId) => {
   try {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'ogya034@gmail.com', // Replace with your email
-        pass: 'oxyl xyfs qako bldv', // Replace with your email password
+        pass: 'cruc jcey fqjy yqmd', // Replace with your email password
       },
     });
 
     let mailOptions = {
       from: 'ogya034@gmail.com', // Replace with your email
       to: 'ogya034@gmail.com', // Replace with admin's email
-      subject: 'New Payment Received',
+      subject: 'New order Received',
       text: `A new payment has been received:
-             Name: ${firstName}
+             Name: ${fullname}
              Amount: ₹${amount}
              Transaction ID: ${transactionId}`,
     };
@@ -428,11 +430,9 @@ const razorpayInstance = new Razorpay({
   key_secret: 'p6xSK9DBrJ8bOhASfmpFi2OA', // Replace with your Razorpay key secret
 });
 // Create a new order
-app.post('/api/order', async (req, res) => {
+app.post('/order', async (req, res) => {
   try {
-      const { userId, fullname, streetAddress, townCity, state, pinCode, phone, email, paymentMethod, transactionId, paymentStatus, amount, productId, productName } = req.body;
-
-      const newOrder = await Order.create({
+      const {
           userId,
           fullname,
           streetAddress,
@@ -445,10 +445,26 @@ app.post('/api/order', async (req, res) => {
           transactionId,
           paymentStatus,
           amount,
-          productId,
-          productName 
+          products // Getting the products from the request body
+      } = req.body;
+
+      const newOrder = await BillingOrder.create({
+          userId,
+          fullname,
+          streetAddress,
+          townCity,
+          state,
+          pinCode,
+          phone,
+          email,
+          paymentMethod,
+          transactionId,
+          paymentStatus,
+          amount,
+          products, // Saving products in the order
       });
-      await sendAdminNotification(firstName, amount, transactionId || 'N/A');
+
+      await sendAdminNotification(fullname, amount, transactionId || 'N/A');
 
       return res.status(201).json(newOrder);
   } catch (error) {
@@ -456,6 +472,7 @@ app.post('/api/order', async (req, res) => {
       return res.status(500).json({ error: 'Error creating order' });
   }
 });
+
 
 
 // Create an order for Razorpay payment
@@ -590,7 +607,7 @@ app.post('/api/payment/verify', async (req, res) => {
 
 app.get('/api/billing', async (req, res) => {
   try {
-    const billingDetails = await Order.findAll();
+    const billingDetails = await BillingOrder.findAll();
     res.status(200).json(billingDetails);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching billing details' });
@@ -601,7 +618,7 @@ app.put('/orders/:id/status', async (req, res) => {
   const { status } = req.body;
 
   try {
-      const order = await Order.findByPk(id);
+      const order = await BillingOrder.findByPk(id);
 
       if (!order) {
           return res.status(404).json({ message: 'Order not found' });
@@ -639,7 +656,7 @@ app.delete('/api/billing/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-      const order = await Order.findByPk(id);
+      const order = await BillingOrder.findByPk(id);
       if (!order) {
           return res.status(404).json({ message: 'Order not found' });
       }
