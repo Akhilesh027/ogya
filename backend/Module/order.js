@@ -50,12 +50,14 @@ const Order = sequelize.define('Order', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    products: [
-        {
-          productId: { type: String, required: true },
-          productName: { type: String, required: true },
-        },
-      ],
+    productId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    productName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 });
 
 module.exports = Order;
