@@ -384,24 +384,60 @@ app.get('/api/cart', async (req, res) => {
   }
 });
 
-const sendAdminNotification = async (fullname, amount, transactionId) => {
+const sendAdminNotification = async (fullname, amount, transactionId, streetAddress, townCity, state, pinCode, phone, email, products) => {
   try {
+    console.log('Notification data:', {
+      fullname,
+      amount,
+      transactionId,
+      streetAddress,
+      townCity,
+      state,
+      pinCode,
+      phone,
+      email,
+      products
+    });
+
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'ogya034@gmail.com', // Replace with your email
-        pass: 'cruc jcey fqjy yqmd', // Replace with your email password
+        user: 'ogya034@gmail.com',
+        pass: 'cruc jcey fqjy yqmd',
       },
     });
 
+    let formattedProducts = "No products ordered";
+    if (Array.isArray(products) && products.length > 0) {
+      formattedProducts = products.map((product, index) => {
+        return `Product ${index + 1}:
+        - Name: ${product.name}
+        - Quantity: ${product.quantity}
+        - Price: ₹${product.price}`;
+      }).join('\n\n');
+    } else if (products && typeof products === 'object') {
+      formattedProducts = `Product:
+        - Name: ${products.name}
+        - Quantity: ${products.quantity}
+        - Price: ₹${products.price}`;
+    }
+
     let mailOptions = {
-      from: 'ogya034@gmail.com', // Replace with your email
-      to: 'ogya034@gmail.com', // Replace with admin's email
-      subject: 'New order Received',
-      text: `A new payment has been received:
-             Name: ${fullname}
-             Amount: ₹${amount}
-             Transaction ID: ${transactionId}`,
+      from: 'ogya034@gmail.com',
+      to: 'ogya034@gmail.com',
+      subject: 'New Order Received',
+      text: `A new order has been received!
+
+Order Details:
+- Name: ${fullname}
+- Amount: ₹${amount}
+- Transaction ID: ${transactionId || 'N/A'}
+- Phone: ${phone}
+- Email: ${email}
+- Address: ${streetAddress}, ${townCity}, ${state} ${pinCode}
+
+Products Ordered:
+${formattedProducts}`,
     };
 
     let info = await transporter.sendMail(mailOptions);
@@ -415,7 +451,6 @@ const sendAdminNotification = async (fullname, amount, transactionId) => {
 // Get orders by userId
 app.get('/api/orders/:userId', async (req, res) => {
     const { userId } = req.params;
-
     try {
         const orders = await Order.findAll({ where: { userId } });
         return res.status(200).json(orders);
@@ -464,7 +499,7 @@ app.post('/order', async (req, res) => {
           products, // Saving products in the order
       });
 
-      await sendAdminNotification(fullname, amount, transactionId || 'N/A');
+      await sendAdminNotification(fullname, amount, transactionId, streetAddress, townCity, state, pinCode, phone, email, products);
 
       return res.status(201).json(newOrder);
   } catch (error) {
